@@ -17,6 +17,7 @@
 # include "../ft_printf/includes/ft_printf.h"
 # include <signal.h>
 # include <unistd.h>
+# include <stdio.h>
 
 /* ----------------PARSING---------------- */
 

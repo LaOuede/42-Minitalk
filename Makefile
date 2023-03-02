@@ -6,7 +6,7 @@
 #    By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/26 12:57:00 by gle-roux          #+#    #+#              #
-#    Updated: 2023/02/28 15:41:19 by gle-roux         ###   ########.fr        #
+#    Updated: 2023/03/02 14:25:05 by gle-roux         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -74,11 +74,12 @@ CFLAGS	= 	-Wall -Wextra -Werror
 ARCH	=	ar rcs
 RM		=	rm -rf
 
-# Dir. and files names
-NAME		=	minitalk
+# Librairies names
+NAME		=
 CLIENT		=	client
 SERVER		=	server
 
+# Dir. and files names
 SRCS_C_DIR	=	./src_client/
 SRCS_C_LIST	=	client.c
 SRCS_C		=	$(addprefix $(SRCS_C_DIR), $(SRCS_C_LIST))
@@ -97,14 +98,17 @@ HEADER_DIR	=	./includes/
 HEADER_LIST	=	minitalk.h
 HEADER	 	=	$(addprefix $(HEADER_DIR), $(HEADER_LIST))
 
+# Libft variables
 LIBFT_DIR	=	./libft/
 LIBFT		=	$(LIBFT_DIR)libft.a
 LIBFT_H		=	$(LIBFT_DIR)includes/libft.h
 
+# Printf variables
 PRINTF_DIR	=	./ft_printf/
 PRINTF		=	$(PRINTF_DIR)printf.a
 PRINTF_H	=	$(PRINTF_DIR)includes/ft_printf.h
 
+# Evaluator variable
 USER		=	$(shell whoami)
 
 #------------------------------------------------------------------------------#
@@ -119,17 +123,17 @@ all: dir $(CLIENT) $(SERVER)
 
 # Compile
 $(CLIENT): $(OBJS_C)
-	@$(CC) $(CFLAGS) $(SRCS_S) -o $(CLIENT)
+	@$(CC) $(CFLAGS) $(SRCS_C) -o $(CLIENT)
 
 $(SERVER): $(OBJS_S)
 	@echo "\n\n$W>>>>>>>>>>>>>>>>>>>>> $Zminitalk is $Gdone ✅ $W<<<<<<<<<<<<<<<<<<<<<<"
 	@echo "\n$W--------------------------- $Zlibft.a $W----------------------------"
 	@make -C $(LIBFT_DIR)
-	@echo "\n$W--------------------------- $Zlibft.a $W----------------------------"
+	@echo "\n$W-------------------------- $Zprintf.a $W---------------------------"
 	@make -C $(PRINTF_DIR)
 	@$(CC) $(CFLAGS) $(SRCS_S) $(LIBFT) $(PRINTF) -o $(SERVER)
 	@echo "\n-------------- $ZIf help is needed, type $Ymake help $W--------------"
-	@echo "\n>>>>>>>>>>>>>>>>>>>> $ZMINITALK is $Gready ✅$W <<<<<<<<<<<<<<<<<<<<"
+	@echo "\n>>>>>>>>>>>><>>>>>>>> $ZMINITALK is $Gready ✅$W <<<<<<<<<<<<<<<<<<<<"
 
 # Create all files .o (object) from files .c (source code)
 $(OBJS_DIR)%.o: $(SRCS_C_DIR)%.c $(HEADER)
@@ -150,7 +154,7 @@ clean:
 	@$(RM) $(OBJS_DIR)
 	@$(MAKE) -C $(LIBFT_DIR) clean
 	@$(MAKE) -C $(PRINTF_DIR) clean
-	@echo "$W-------------- $Z$(NAME) : $(OBJS_DIR) was $Rdeleted ❌$W--------------"
+	@echo "$W------------ $Zclient & server : $(OBJS_DIR) was $Rdeleted ❌$W-----------"
 
 # Removes executables
 fclean: clean

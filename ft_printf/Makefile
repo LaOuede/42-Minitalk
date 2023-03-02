@@ -6,7 +6,7 @@
 #    By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/26 12:57:00 by gle-roux          #+#    #+#              #
-#    Updated: 2023/02/27 10:26:46 by gle-roux         ###   ########.fr        #
+#    Updated: 2023/03/02 09:38:56 by gle-roux         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,7 +58,7 @@ all: dir $(NAME)
 # Compile library
 $(NAME): $(OBJS)
 	@$(ARCH) $(NAME) $(OBJS)
-	@echo "\n\n$W----------------------- $Zprintf is $Gdone ✅$W ----------------------"
+	@echo "\n\n$W---------------------- $Zprintf is $Gdone ✅$W ----------------------"
 	
 # Create all files .o (object) from files .c (source code)
 $(OBJS_DIR)%.o: $(SRCS_DIR)%.c $(HEADER)
