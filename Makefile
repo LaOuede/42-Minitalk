@@ -6,7 +6,7 @@
 #    By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/26 12:57:00 by gle-roux          #+#    #+#              #
-#    Updated: 2023/03/02 14:25:05 by gle-roux         ###   ########.fr        #
+#    Updated: 2023/03/02 15:45:10 by gle-roux         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -126,7 +126,7 @@ $(CLIENT): $(OBJS_C)
 	@$(CC) $(CFLAGS) $(SRCS_C) -o $(CLIENT)
 
 $(SERVER): $(OBJS_S)
-	@echo "\n\n$W>>>>>>>>>>>>>>>>>>>>> $Zminitalk is $Gdone ✅ $W<<<<<<<<<<<<<<<<<<<<<<"
+	@echo "\n\n$W---------------------- $Zminitalk is $Gdone ✅ $W---------------------"
 	@echo "\n$W--------------------------- $Zlibft.a $W----------------------------"
 	@make -C $(LIBFT_DIR)
 	@echo "\n$W-------------------------- $Zprintf.a $W---------------------------"
@@ -159,7 +159,7 @@ clean:
 # Removes executables
 fclean: clean
 	@$(RM) $(SERVER) $(CLIENT) $(LIBFT) $(PRINTF)
-	@echo "\n$W--------- $ZAll exec. and archives successfully $Rdeleted ❌$W-------\n"
+	@echo "\n$W-------- $ZAll exec. and archives successfully $Rdeleted ❌$W--------\n"
 	@echo "$W>>>>>>>>>>>>>>>>>>>>> $ZCleaning is $Gdone ✅ $W<<<<<<<<<<<<<<<<<<<<<\n\n"
 
 # Removes objects and executables and remake

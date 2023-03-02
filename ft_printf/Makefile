@@ -6,7 +6,7 @@
 #    By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/26 12:57:00 by gle-roux          #+#    #+#              #
-#    Updated: 2023/03/02 09:38:56 by gle-roux         ###   ########.fr        #
+#    Updated: 2023/03/02 15:43:44 by gle-roux         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -77,7 +77,7 @@ clean:
 # Removes all objects and executables
 fclean: clean
 	@$(RM) $(NAME)
-	@echo "$W-------- $ZAll exec. and archives successfully $Rdeleted ❌$W--------"
+	@echo "$W------- $ZAll exec. and archives successfully $Rdeleted ❌$W--------"
 
 # Removes objects and executables and remake
 re: fclean all
