@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+         #
+#    By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/26 12:57:00 by gle-roux          #+#    #+#              #
-#    Updated: 2023/03/03 09:44:01 by gwenolalero      ###   ########.fr        #
+#    Updated: 2023/03/06 14:30:40 by gle-roux         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -123,7 +123,8 @@ all: dir $(CLIENT) $(SERVER)
 
 # Compile
 $(CLIENT): $(OBJS_C)
-	@$(CC) $(CFLAGS) $(SRCS_C) -o $(CLIENT)
+	@make -C $(LIBFT_DIR)
+	@$(CC) $(CFLAGS) $(SRCS_C) $(LIBFT) -o $(CLIENT)
 
 $(SERVER): $(OBJS_S)
 	@echo "\n\n$W---------------------- $Zminitalk is $Gdone ✅ $W---------------------"

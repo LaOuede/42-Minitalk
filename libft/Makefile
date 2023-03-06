@@ -6,7 +6,7 @@
 #    By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/26 12:57:00 by gle-roux          #+#    #+#              #
-#    Updated: 2023/02/27 10:08:11 by gle-roux         ###   ########.fr        #
+#    Updated: 2023/03/06 14:24:10 by gle-roux         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,6 +57,7 @@ SRCS_LIST	=	ft_atoi.c \
 				ft_putstr_fd.c \
 				ft_putendl_fd.c \
 				ft_split.c \
+				ft_str_isdigit.c \
 				ft_strchr.c \
 				ft_strdup.c \
 				ft_striteri.c \

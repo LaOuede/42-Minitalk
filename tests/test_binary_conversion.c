@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test_binary_conversion.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+        */
+/*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 15:09:16 by gwenolalero       #+#    #+#             */
-/*   Updated: 2023/03/04 17:06:46 by gwenolalero      ###   ########.fr       */
+/*   Updated: 2023/03/06 13:24:55 by gle-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,10 @@ int	main(int argc, char**argv)
 	int	bitshift = 0;
 
 	if (argc != 2)
+	{
+		printf("🟡 Invalid arguments\n");
 		return (1);
+	}
 	while (argv[1][i])
 	{
 		printf("Letter = %c ; ASCII = [%d]\n", argv[1][i], argv[1][i]);

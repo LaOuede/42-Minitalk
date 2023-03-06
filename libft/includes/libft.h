@@ -6,7 +6,7 @@
 /*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 10:10:07 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/02/27 10:26:03 by gle-roux         ###   ########.fr       */
+/*   Updated: 2023/03/06 14:22:30 by gle-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,5 +87,6 @@ int		ft_lstsize(t_list *lst);
 
 /*Other functions*/
 char	*ft_free_tab(char **tab);
+int		ft_str_isdigit(char *str);
 
 #endif
