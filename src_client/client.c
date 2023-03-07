@@ -6,7 +6,7 @@
 /*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 14:08:12 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/06 15:23:40 by gle-roux         ###   ########.fr       */
+/*   Updated: 2023/03/07 15:52:56 by gle-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,7 @@ static void	handler_sigusr(int signum)
 	if (signum == SIGUSR1)
 	{
 		printf(KYEL "🟢 ./client : Transmission ended\n" KNRM);
-		exit(EXIT_FAILURE);
+		exit(EXIT_SUCCESS);
 	}
 	else if (signum == SIGUSR2)
 	{
@@ -188,7 +188,7 @@ int	main(int argc, char **argv)
 		exit(EXIT_FAILURE);
 	}
 	pid_client = getpid();
-	printf(KMAG "🟣 PID : %d\n" KNRM, pid_client);
+	printf(KMAG "🟣 Client PID : %d\n" KNRM, pid_client);
 	pid_server = atoi(argv[1]);
 	signal(SIGUSR1, handler_sigusr);
 	signal(SIGUSR2, handler_sigusr);

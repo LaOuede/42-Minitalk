@@ -6,7 +6,7 @@
 /*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 13:51:35 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/06 15:30:01 by gle-roux         ###   ########.fr       */
+/*   Updated: 2023/03/07 15:51:46 by gle-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,11 +132,14 @@ int	main(void)
 } */
 
 /* TEST 5 - Notifications */
-static void	handler_sigusr(int signum)
+static void	handler(int signum, siginfo_t *info, void *context)
 {
+	(void)context;
+	pid_t	client;
 	static char	c = 0;
 	static int	bits = 0;
 
+	client = info->si_pid;
 	if (signum == SIGUSR1)
 		c |= 128 >> bits;
 	bits++;
@@ -146,17 +149,35 @@ static void	handler_sigusr(int signum)
 		c = 0;
 		bits = 0;
 	}
+	kill(client, SIGUSR1);
 }
 
 int	main(void)
 {
 	pid_t				pid;
+	struct sigaction	action;
 
+/* 	action.sa_handler = 0;
+	action.sa_sigaction = handler;
+	action.sa_mask = ;
+	action.sa_flags = SA_SIGINFO; */
+	action.sa_handler = 0;
+	action.sa_sigaction = handler;
+	sigemptyset(&action.sa_mask);
+	action.sa_flags = SA_RESTART;
+	sigaction(SIGUSR1, &action, 0);
+	sigaction(SIGUSR2, &action, 0);
 	pid = getpid();
 	printf(KBLU KBLD"🔵 Server waiting...\n" KNRM);
-	printf(KBLU "PID : %d\n" KNRM, pid);
-	signal(SIGUSR1, handler_sigusr);
-	signal(SIGUSR2, handler_sigusr);
+	printf(KBLU "Server PID : %d\n" KNRM, pid);
 	while (1)
 		pause();
 }
+
+/* struct sigaction {
+	void		(*sa_handler)(int);
+	void		(*sa_sigaction)(int, siginfo_t *, void *);
+	sigset_t	sa_mask;
+	int			sa_flags;
+	void		(*sa_restorer)(void);
+}; */
