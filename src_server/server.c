@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 13:51:35 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/07 15:51:46 by gle-roux         ###   ########.fr       */
+/*   Updated: 2023/03/08 14:50:44 by gwenolalero      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ int	main(void)
 } */
 
 /* TEST 5 - Notifications */
-static void	handler(int signum, siginfo_t *info, void *context)
+/* static void	handler(int signum, siginfo_t *info, void *context)
 {
 	(void)context;
 	pid_t	client;
@@ -157,10 +157,10 @@ int	main(void)
 	pid_t				pid;
 	struct sigaction	action;
 
-/* 	action.sa_handler = 0;
-	action.sa_sigaction = handler;
-	action.sa_mask = ;
-	action.sa_flags = SA_SIGINFO; */
+	//action.sa_handler = 0;
+	//action.sa_sigaction = handler;
+	//action.sa_mask = ;
+	//action.sa_flags = SA_SIGINFO;
 	action.sa_handler = 0;
 	action.sa_sigaction = handler;
 	sigemptyset(&action.sa_mask);
@@ -171,7 +171,39 @@ int	main(void)
 	printf(KBLU KBLD"🔵 Server waiting...\n" KNRM);
 	printf(KBLU "Server PID : %d\n" KNRM, pid);
 	while (1)
+		sleep(1);
+} */
+
+void	handler_sigusr(int signum)
+{
+	static char	c = 0;
+	static int	bits = 0;
+
+	if (signum == SIGUSR1)
+		c |= 128 >> bits;
+	bits++;
+	if (bits == 8)
+	{
+		printf("%c\n", c);
+		c = 0;
+		bits = 0;
+	}
+}
+
+int	main(void)
+{
+	pid_t	pid;
+
+	pid = getpid();
+	printf(KBLU "Server PID : %d\n" KNRM, pid);
+	printf(KBLU KBLD"🔵 Server waiting...\n" KNRM);
+	while (1)
+	{
+		signal(SIGUSR1, handler_sigusr);
+		signal(SIGUSR2, handler_sigusr);
 		pause();
+	}
+	return (0);
 }
 
 /* struct sigaction {
