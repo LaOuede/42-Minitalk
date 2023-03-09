@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+        */
+/*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 14:08:12 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/08 14:57:42 by gwenolalero      ###   ########.fr       */
+/*   Updated: 2023/03/09 15:07:09 by gle-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,11 +139,11 @@ int	main(int argc, char **argv)
 	return (0);
 } */
 
-/* TEST 5 - Notifications */
+/* TEST 5 - Notifications from server to client*/
 void	send_str(char *str, int pid)
 {
-	int	i = 0;
-	int	bitshift = 0;
+	static int	i = 0;
+	static int	bitshift = 0;
 
 	while (str[i])
 	{
@@ -159,21 +159,26 @@ void	send_str(char *str, int pid)
 		}
 		i++;
 	}
+	if (str[i] == '\0')
+		kill(getpid(), SIGUSR2);
 }
 
-/* static void	handler_sigusr(int signum)
+static void	handler_sigusr(int signum)
 {
 	if (signum == SIGUSR1)
 	{
-		printf(KYEL "🟢 ./client : Transmission ended\n" KNRM);
-		exit(EXIT_SUCCESS);
+		printf(KYEL "🟡 ./client : Bit succesfully sent\n" KNRM);
+/* 		printf(KYEL "🟢 ./client : Transmission ended succesfully\n" KNRM);
+		exit(EXIT_SUCCESS); */
 	}
 	else if (signum == SIGUSR2)
 	{
-		printf(KYEL "🟡 ./client : Transmission ended\n" KNRM);
-		exit(EXIT_FAILURE);
+		printf(KGRN "🟢 ./client : Transmission ended succesfully\n" KNRM);
+		exit(EXIT_SUCCESS);
+/* 		printf(KYEL "🟡 ./client : Transmission ended unexpectedly\n" KNRM);
+		exit(EXIT_FAILURE); */
 	}
-} */
+}
 
 int	main(int argc, char **argv)
 {
@@ -183,16 +188,17 @@ int	main(int argc, char **argv)
 
 	if (argc != 3 || ft_str_isdigit(argv[1]) == 0)
 	{
-		printf(KYEL KBLD "🟡 Invalid arguments\n" KNRM);
-		printf(KYEL "Usage: ./client <pid> <message_to_send>\n");
+		ft_printf(KRED KBLD "🔴 Invalid arguments\n" KNRM);
+		ft_printf(KRED "Usage: ./client <pid> <message_to_send>\n");
 		exit(EXIT_FAILURE);
 	}
 	pid_client = getpid();
-	printf(KMAG "🟣 Client PID : %d\n" KNRM, pid_client);
+	ft_printf(KMAG "🟣 Client PID : %d\n" KNRM, pid_client);
 	msg = argv[2];
 	pid_server = atoi(argv[1]);
-/* 	signal(SIGUSR1, handler_sigusr);
-	signal(SIGUSR2, handler_sigusr); */
+	signal(SIGUSR1, handler_sigusr);
+	signal(SIGUSR2, handler_sigusr);
 	send_str(msg, pid_server);
-	printf(KGRN KBLD "🟢 Successful transmission\n" KNRM);
+	while (1)
+		pause();
 }

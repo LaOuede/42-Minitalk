@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+        */
+/*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 13:51:35 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/08 14:50:44 by gwenolalero      ###   ########.fr       */
+/*   Updated: 2023/03/09 15:35:56 by gle-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ int	main(void)
 		pause();
 } */
 
-/* TEST 5 - Notifications */
+/* TEST 5 - Notifications from server to client*/
 /* static void	handler(int signum, siginfo_t *info, void *context)
 {
 	(void)context;
@@ -174,42 +174,39 @@ int	main(void)
 		sleep(1);
 } */
 
-void	handler_sigusr(int signum)
+void	handler_sigusr(int signum, siginfo_t *info, void *context)
 {
 	static char	c = 0;
 	static int	bits = 0;
+	pid_t		pid_client = 0;
 
+	(void)context;
+	if (info->si_pid)
+		pid_client = info->si_pid;
 	if (signum == SIGUSR1)
 		c |= 128 >> bits;
-	bits++;
-	if (bits == 8)
+	if (++bits == 8)
 	{
-		printf("%c\n", c);
+		ft_printf("%c", c);
 		c = 0;
 		bits = 0;
+		kill(pid_client, SIGUSR1);
 	}
 }
 
 int	main(void)
 {
-	pid_t	pid;
+	pid_t				pid;
+	struct sigaction	action;
 
+	action.sa_handler = 0;
+	action.sa_sigaction = handler_sigusr;
+	action.sa_flags = SA_SIGINFO;
 	pid = getpid();
-	printf(KBLU "Server PID : %d\n" KNRM, pid);
-	printf(KBLU KBLD"🔵 Server waiting...\n" KNRM);
+	ft_printf(KBLU "Server PID : %d\n" KNRM, pid);
+	ft_printf(KBLU KBLD"🔵 Server listening...\n" KNRM);
+	sigaction(SIGUSR1, &action, 0);
+	sigaction(SIGUSR2, &action, 0);
 	while (1)
-	{
-		signal(SIGUSR1, handler_sigusr);
-		signal(SIGUSR2, handler_sigusr);
 		pause();
-	}
-	return (0);
 }
-
-/* struct sigaction {
-	void		(*sa_handler)(int);
-	void		(*sa_sigaction)(int, siginfo_t *, void *);
-	sigset_t	sa_mask;
-	int			sa_flags;
-	void		(*sa_restorer)(void);
-}; */

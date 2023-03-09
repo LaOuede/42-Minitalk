@@ -6,7 +6,7 @@
 #    By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/26 12:57:00 by gle-roux          #+#    #+#              #
-#    Updated: 2023/03/06 14:30:40 by gle-roux         ###   ########.fr        #
+#    Updated: 2023/03/09 08:25:59 by gle-roux         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -124,7 +124,8 @@ all: dir $(CLIENT) $(SERVER)
 # Compile
 $(CLIENT): $(OBJS_C)
 	@make -C $(LIBFT_DIR)
-	@$(CC) $(CFLAGS) $(SRCS_C) $(LIBFT) -o $(CLIENT)
+	@make -C $(PRINTF_DIR)
+	@$(CC) $(CFLAGS) $(SRCS_C) $(LIBFT) $(PRINTF) -o $(CLIENT)
 
 $(SERVER): $(OBJS_S)
 	@echo "\n\n$W---------------------- $Zminitalk is $Gdone ✅ $W---------------------"
@@ -134,7 +135,7 @@ $(SERVER): $(OBJS_S)
 	@make -C $(PRINTF_DIR)
 	@$(CC) $(CFLAGS) $(SRCS_S) $(LIBFT) $(PRINTF) -o $(SERVER)
 	@echo "\n-------------- $ZIf help is needed, type $Ymake help $W--------------"
-	@echo "\n>>>>>>>>>>>><>>>>>>>> $ZMINITALK is $Gready ✅$W <<<<<<<<<<<<<<<<<<<<"
+	@echo "\n>>>>>>>>>>>>>>>>>>>>> $ZMINITALK is $Gready ✅$W <<<<<<<<<<<<<<<<<<<<"
 
 # Create all files .o (object) from files .c (source code)
 $(OBJS_DIR)%.o: $(SRCS_C_DIR)%.c $(HEADER)
