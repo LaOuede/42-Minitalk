@@ -6,7 +6,7 @@
 /*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 14:08:12 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/09 15:07:09 by gle-roux         ###   ########.fr       */
+/*   Updated: 2023/03/10 11:47:52 by gle-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,70 @@ int	main(int argc, char **argv)
 } */
 
 /* TEST 5 - Notifications from server to client*/
+/* void	send_str(char *str, int pid)
+{
+	static int	i = 0;
+	static int	bitshift = 0;
+
+	while (str[i])
+	{
+		bitshift = 128;
+		while (bitshift > 0)
+		{
+			if (str[i] & bitshift)
+				kill(pid, SIGUSR1);
+			else
+				kill(pid, SIGUSR2);
+			bitshift /= 2;
+			usleep(500);
+		}
+		i++;
+	}
+	if (str[i] == '\0')
+		kill(getpid(), SIGUSR2);
+}
+
+static void	handler_sigusr(int signum)
+{
+	static int	counter = 0;
+
+	if (signum == SIGUSR1)
+	{
+		counter += 1;
+		ft_printf(KYEL "🟡 ./client : Bit succesfully sent\n" KNRM);
+	}
+	else (signum == SIGUSR2)
+	{
+		ft_printf(KGRN "Total bytes sent = %d\n" KNRM, counter);
+		ft_printf(KGRN "🟢 ./client : Transmission ended succesfully\n" KNRM);
+		exit(EXIT_SUCCESS);
+	}
+}
+
+int	main(int argc, char **argv)
+{
+	pid_t	pid_server;
+	pid_t	pid_client;
+	char	*msg;
+
+	if (argc != 3 || ft_str_isdigit(argv[1]) == 0)
+	{
+		ft_printf(KRED KBLD "🔴 Invalid arguments\n" KNRM);
+		ft_printf(KRED "Usage: ./client <pid> <message_to_send>\n");
+		exit(EXIT_FAILURE);
+	}
+	pid_client = getpid();
+	ft_printf(KMAG "🟣 Client PID : %d\n" KNRM, pid_client);
+	msg = argv[2];
+	pid_server = atoi(argv[1]);
+	signal(SIGUSR1, handler_sigusr);
+	signal(SIGUSR2, handler_sigusr);
+	send_str(msg, pid_server);
+	while (1)
+		pause();
+} */
+
+/* TEST 6 - Memory allocation and handling */
 void	send_str(char *str, int pid)
 {
 	static int	i = 0;
@@ -165,15 +229,19 @@ void	send_str(char *str, int pid)
 
 static void	handler_sigusr(int signum)
 {
+	static int	counter = 0;
+
 	if (signum == SIGUSR1)
 	{
-		printf(KYEL "🟡 ./client : Bit succesfully sent\n" KNRM);
+		counter += 1;
+		ft_printf(KYEL "🟡 ./client : Bit succesfully sent\n" KNRM);
 /* 		printf(KYEL "🟢 ./client : Transmission ended succesfully\n" KNRM);
 		exit(EXIT_SUCCESS); */
 	}
 	else if (signum == SIGUSR2)
 	{
-		printf(KGRN "🟢 ./client : Transmission ended succesfully\n" KNRM);
+		ft_printf(KGRN "Total bytes sent = %d\n" KNRM, counter);
+		ft_printf(KGRN "🟢 ./client : Transmission ended succesfully\n" KNRM);
 		exit(EXIT_SUCCESS);
 /* 		printf(KYEL "🟡 ./client : Transmission ended unexpectedly\n" KNRM);
 		exit(EXIT_FAILURE); */

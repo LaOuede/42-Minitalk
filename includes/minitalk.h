@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minitalk.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+        */
+/*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 10:10:07 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/03 09:52:51 by gwenolalero      ###   ########.fr       */
+/*   Updated: 2023/03/10 11:40:48 by gle-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,13 @@
 /* ----------------PARSING---------------- */
 
 /* ----------------STRUCTURES---------------- */
+typedef struct minitalk
+{
+	char	*msg;
+	int		size;
+	int		capacity;
+}			t_minitalk;
+
 
 /* ----------------UTILS---------------- */
 

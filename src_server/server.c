@@ -6,7 +6,7 @@
 /*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 13:51:35 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/09 15:35:56 by gle-roux         ###   ########.fr       */
+/*   Updated: 2023/03/10 11:49:13 by gle-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,49 +132,7 @@ int	main(void)
 } */
 
 /* TEST 5 - Notifications from server to client*/
-/* static void	handler(int signum, siginfo_t *info, void *context)
-{
-	(void)context;
-	pid_t	client;
-	static char	c = 0;
-	static int	bits = 0;
-
-	client = info->si_pid;
-	if (signum == SIGUSR1)
-		c |= 128 >> bits;
-	bits++;
-	if (bits == 8)
-	{
-		printf("%c\n", c);
-		c = 0;
-		bits = 0;
-	}
-	kill(client, SIGUSR1);
-}
-
-int	main(void)
-{
-	pid_t				pid;
-	struct sigaction	action;
-
-	//action.sa_handler = 0;
-	//action.sa_sigaction = handler;
-	//action.sa_mask = ;
-	//action.sa_flags = SA_SIGINFO;
-	action.sa_handler = 0;
-	action.sa_sigaction = handler;
-	sigemptyset(&action.sa_mask);
-	action.sa_flags = SA_RESTART;
-	sigaction(SIGUSR1, &action, 0);
-	sigaction(SIGUSR2, &action, 0);
-	pid = getpid();
-	printf(KBLU KBLD"🔵 Server waiting...\n" KNRM);
-	printf(KBLU "Server PID : %d\n" KNRM, pid);
-	while (1)
-		sleep(1);
-} */
-
-void	handler_sigusr(int signum, siginfo_t *info, void *context)
+/* void	handler_sigusr(int signum, siginfo_t *info, void *context)
 {
 	static char	c = 0;
 	static int	bits = 0;
@@ -191,6 +149,87 @@ void	handler_sigusr(int signum, siginfo_t *info, void *context)
 		c = 0;
 		bits = 0;
 		kill(pid_client, SIGUSR1);
+	}
+}
+
+int	main(void)
+{
+	pid_t				pid;
+	struct sigaction	action;
+
+	action.sa_handler = 0;
+	action.sa_sigaction = handler_sigusr;
+	action.sa_flags = SA_SIGINFO;
+	pid = getpid();
+	ft_printf(KBLU "Server PID : %d\n" KNRM, pid);
+	ft_printf(KBLU KBLD"🔵 Server listening...\n" KNRM);
+	sigaction(SIGUSR1, &action, 0);
+	sigaction(SIGUSR2, &action, 0);
+	while (1)
+		pause();
+} */
+
+/* TEST 6 - Memory allocation and handling */
+
+void	ft_print_msg(char *str)
+{
+	ft_printf(KBLU "Message received : \n %s\n"KNRM, str);
+	free(str);
+}
+
+char	*ft_stock_char(char *str, char c)
+{
+	int	i = 0;
+
+	if (!str)
+	{
+		ft_printf("check str\n");
+		str = ft_calloc(sizeof(str), 2);
+		if (!str)
+		{
+			free(str);
+			return (NULL);
+		}
+	}
+	while (str[i] != '\0')
+		i++;
+	str[i] = c;
+	ft_printf("i = %d\n", i);
+	ft_printf("char = %c\n", str[i]);
+	return (str);
+}
+
+void	handler_sigusr(int signum, siginfo_t *info, void *context)
+{
+	static char	c = 0;
+	static int	bits = 0;
+	static char	*msg = NULL;
+	pid_t		pid_client = 0;
+
+	(void)context;
+	if (info->si_pid)
+		pid_client = info->si_pid;
+	if (signum == SIGUSR1)
+		c |= 128 >> bits;
+	if (++bits == 8)
+	{
+		ft_printf("c = %c\n", c);
+		if (c != '\0')
+		{
+			ft_printf("check add char\n");
+			msg = ft_stock_char(msg, c);
+			ft_printf("msg = %s\n", msg);
+		}
+		if (!c)
+		{
+			ft_printf("check '\0'\n");
+			ft_print_msg(msg);
+		}
+		c = 0;
+		bits = 0;
+		kill(pid_client, SIGUSR1);
+		ft_printf("---------------------\n");
+
 	}
 }
 
