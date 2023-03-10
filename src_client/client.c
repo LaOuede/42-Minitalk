@@ -6,7 +6,7 @@
 /*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 14:08:12 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/10 11:47:52 by gle-roux         ###   ########.fr       */
+/*   Updated: 2023/03/10 15:44:45 by gle-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,27 +204,36 @@ int	main(int argc, char **argv)
 } */
 
 /* TEST 6 - Memory allocation and handling */
+void	send_char(char c, int pid)
+{
+	static int	bitshift = 0;
+
+	bitshift = 128;
+	while (bitshift > 0)
+	{
+		if (c & bitshift)
+			kill(pid, SIGUSR1);
+		else
+			kill(pid, SIGUSR2);
+		bitshift /= 2;
+		usleep(500);
+	}
+}
+
 void	send_str(char *str, int pid)
 {
 	static int	i = 0;
-	static int	bitshift = 0;
 
 	while (str[i])
 	{
-		bitshift = 128;
-		while (bitshift > 0)
-		{
-			if (str[i] & bitshift)
-				kill(pid, SIGUSR1);
-			else
-				kill(pid, SIGUSR2);
-			bitshift /= 2;
-			usleep(500);
-		}
+		send_char(str[i], pid);
 		i++;
 	}
 	if (str[i] == '\0')
+	{
+		send_char('\0', pid);
 		kill(getpid(), SIGUSR2);
+	}
 }
 
 static void	handler_sigusr(int signum)

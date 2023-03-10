@@ -6,7 +6,7 @@
 /*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 13:51:35 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/10 11:49:13 by gle-roux         ###   ########.fr       */
+/*   Updated: 2023/03/10 15:49:04 by gle-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,7 +173,7 @@ int	main(void)
 
 void	ft_print_msg(char *str)
 {
-	ft_printf(KBLU "Message received : \n %s\n"KNRM, str);
+	ft_printf(KBLU "Message received : \n%s\n"KNRM, str);
 	free(str);
 }
 
@@ -221,10 +221,7 @@ void	handler_sigusr(int signum, siginfo_t *info, void *context)
 			ft_printf("msg = %s\n", msg);
 		}
 		if (!c)
-		{
-			ft_printf("check '\0'\n");
 			ft_print_msg(msg);
-		}
 		c = 0;
 		bits = 0;
 		kill(pid_client, SIGUSR1);
