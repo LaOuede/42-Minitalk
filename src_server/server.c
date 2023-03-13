@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+        */
+/*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 13:51:35 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/11 10:48:36 by gwenolalero      ###   ########.fr       */
+/*   Updated: 2023/03/13 12:55:35 by gle-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,32 +170,57 @@ int	main(void)
 } */
 
 /* TEST 6 - Memory allocation and handling */
-
-void	ft_print_msg(char *str)
+char	*ft_mem_alloc(char *str, int capacity)
 {
-	ft_printf(KBLU "Message received : \n%s\n"KNRM, str);
+	int		i;
+	char	*tmp;
+
+	//ft_printf("check mem dyn alloc\n");
+	tmp = ft_calloc(sizeof(str), (capacity * 2));
+	if (!tmp)
+		return (NULL);
+	i = 0;
+	while (str[i++])
+		tmp[i] = str[i];
+	str = tmp;
+	free(tmp);
+	return (str);
+}
+
+char	*ft_print_msg(char *str)
+{
+	//ft_printf("check print message\n");
+	ft_printf(KBLU "Message received :" KNRM "\n%s\n", str);
 	free(str);
+	str = NULL;
+	return (NULL);
 }
 
 char	*ft_stock_char(char *str, char c)
 {
-	int	i = 0;
+	static int	i;
+	static int	size;
+	static int	capacity;
 
 	if (!str)
 	{
-		ft_printf("check str\n");
-		str = ft_calloc(sizeof(str), 2);
-		if (!str)
-		{
-			free(str);
-			return (NULL);
-		}
+		i = 0;
+		size = 0;
+		capacity = 2;
+		str = ft_calloc(sizeof(str), capacity);
 	}
-	while (str[i] != '\0')
-		i++;
 	str[i] = c;
-	ft_printf("i = %d\n", i);
-	ft_printf("char = %c\n", str[i]);
+	i++;
+	size++;
+	//ft_printf("size = %d\n", size);
+	//ft_printf("i = %d\n", i);
+	//ft_printf("char = %c\n", str[i]);
+	if (size == capacity)
+	{
+		ft_mem_alloc(str, capacity);
+		capacity *= 2;
+	}
+	//ft_printf("capacity = %d\n", capacity);
 	return (str);
 }
 
@@ -213,20 +238,23 @@ void	handler_sigusr(int signum, siginfo_t *info, void *context)
 		c |= 128 >> bits;
 	if (++bits == 8)
 	{
-		ft_printf("c = %c\n", c);
+		//ft_printf("c = %c\n", c);
 		if (c != '\0')
 		{
-			ft_printf("check add char\n");
+			//ft_printf("check add char\n");
 			msg = ft_stock_char(msg, c);
-			ft_printf("msg = %s\n", msg);
+			//ft_printf("msg = %s\n", msg);
 		}
 		if (c == '\0')
+		{
 			ft_print_msg(msg);
+			msg = NULL;
+			kill(pid_client, SIGUSR2);
+		}
 		c = 0;
 		bits = 0;
 		kill(pid_client, SIGUSR1);
-		ft_printf("---------------------\n");
-
+		//ft_printf("---------------------\n");
 	}
 }
 
@@ -237,12 +265,39 @@ int	main(void)
 
 	action.sa_handler = 0;
 	action.sa_sigaction = handler_sigusr;
-	action.sa_flags = SA_SIGINFO;
+	action.sa_flags = SA_SIGINFO | SA_RESTART;
 	pid = getpid();
 	ft_printf(KBLU "Server PID : %d\n" KNRM, pid);
 	ft_printf(KBLU KBLD"🔵 Server listening...\n" KNRM);
 	sigaction(SIGUSR1, &action, 0);
 	sigaction(SIGUSR2, &action, 0);
 	while (1)
-		pause();
+		pause ();
 }
+
+/* Main design to test memory leaks tipping "q" on the server*/
+/* int	main(void)
+{
+	pid_t				pid;
+	char				*buf;
+	struct sigaction	action;
+
+	action.sa_handler = 0;
+	action.sa_sigaction = handler_sigusr;
+	action.sa_flags = SA_SIGINFO | SA_RESTART;
+	pid = getpid();
+	ft_printf(KBLU "Server PID : %d\n" KNRM, pid);
+	ft_printf(KBLU KBLD"🔵 Server listening...\n" KNRM);
+	sigaction(SIGUSR1, &action, 0);
+	sigaction(SIGUSR2, &action, 0);
+	while (1)
+	{
+		buf = get_next_line(STDIN_FILENO);
+		if (*buf == 'q')
+			break ;
+		free (buf);
+	}
+	free (buf);
+	ft_printf(KBLU KBLD"🔵 ./server closing...\n" KNRM);
+	return (0);
+} */

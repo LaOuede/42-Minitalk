@@ -6,7 +6,7 @@
 #    By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/26 12:57:00 by gle-roux          #+#    #+#              #
-#    Updated: 2023/03/09 08:25:59 by gle-roux         ###   ########.fr        #
+#    Updated: 2023/03/13 09:04:46 by gle-roux         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -206,7 +206,7 @@ norm :
 
 # Opens the subject
 pdf:
-	@open https://cdn.intra.42.fr/pdf/pdf/66937/fr.subject.pdf
+	@open https://cdn.intra.42.fr/pdf/pdf/58187/fr.subject.pdf
 
 map:
 	@open https://whimsical.com/push-swap-X6SXns36GzkpCxF5zxkMFJ

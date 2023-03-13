@@ -6,12 +6,16 @@
 /*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 10:10:07 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/06 14:22:30 by gle-roux         ###   ########.fr       */
+/*   Updated: 2023/03/13 11:18:28 by gle-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 42
+# endif
 
 # include <stdlib.h>
 # include <unistd.h>
@@ -88,5 +92,16 @@ int		ft_lstsize(t_list *lst);
 /*Other functions*/
 char	*ft_free_tab(char **tab);
 int		ft_str_isdigit(char *str);
+
+/*Get_next_line*/
+char	*get_next_line(int fd);
+char	*ft_strnjoin(char *s1, const char *s2, int s2_size);
+
+typedef struct s_buf
+{
+	char	*str;
+	ssize_t	readlen;
+	ssize_t	ind;
+}	t_buf;
 
 #endif
