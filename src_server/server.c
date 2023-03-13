@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 13:51:35 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/10 15:49:04 by gle-roux         ###   ########.fr       */
+/*   Updated: 2023/03/11 10:48:36 by gwenolalero      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,7 +220,7 @@ void	handler_sigusr(int signum, siginfo_t *info, void *context)
 			msg = ft_stock_char(msg, c);
 			ft_printf("msg = %s\n", msg);
 		}
-		if (!c)
+		if (c == '\0')
 			ft_print_msg(msg);
 		c = 0;
 		bits = 0;

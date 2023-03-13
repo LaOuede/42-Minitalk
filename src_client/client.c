@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 14:08:12 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/10 15:44:45 by gle-roux         ###   ########.fr       */
+/*   Updated: 2023/03/11 10:51:31 by gwenolalero      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,10 +225,7 @@ void	send_str(char *str, int pid)
 	static int	i = 0;
 
 	while (str[i])
-	{
-		send_char(str[i], pid);
-		i++;
-	}
+		send_char(str[i++], pid);
 	if (str[i] == '\0')
 	{
 		send_char('\0', pid);
