@@ -6,7 +6,7 @@
 #    By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/26 12:57:00 by gle-roux          #+#    #+#              #
-#    Updated: 2023/03/13 09:04:46 by gle-roux         ###   ########.fr        #
+#    Updated: 2023/03/13 14:56:09 by gle-roux         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -187,7 +187,7 @@ test:
 
 norm :
 	@echo "\n$W>>>>>>>>>>>>>>>>>>>>>>>>>> $YNORMINETTE $W<<<<<<<<<<<<<<<<<<<<<<<<<<$Z\n"
-	@norminette $(SRCS) $(HEADER) $(LIBFT_DIR) $(PRINTF_DIR)
+	@norminette $(SRCS) $(HEADER) $(LIBFT_DIR) $(PRINTF_DIR) $(SRCS_C_DIR) $(SRCS_S_DIR)
 	@echo "\n$W>>>>>>>>>>>>>>>>>>>>>>>> $YNORMINETTE ✅ $W<<<<<<<<<<<<<<<<<<<<<<<<<<"
 
 #lsan : $(LSAN)

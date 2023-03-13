@@ -6,7 +6,7 @@
 /*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 14:08:12 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/13 12:40:14 by gle-roux         ###   ########.fr       */
+/*   Updated: 2023/03/13 14:48:38 by gle-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,8 +203,8 @@ int	main(int argc, char **argv)
 		pause();
 } */
 
-/* TEST 6 - Memory allocation and handling */
-void	ft_signal_error(void)
+/* Function signal error */
+/* void	ft_signal_error(void)
 {
 	printf(KYEL KBLD "🟡 ./client : " KNRM KYEL
 		"Transmission ended unexpectedly\n" KNRM);
@@ -230,6 +230,23 @@ void	send_char(char c, int pid)
 		}
 		bitshift /= 2;
 		usleep(500);
+	}
+} */
+
+/* TEST 6 - Memory allocation and handling */
+void	send_char(char c, int pid)
+{
+	static int	bitshift = 0;
+
+	bitshift = 128;
+	while (bitshift > 0)
+	{
+		if (c & bitshift)
+			kill(pid, SIGUSR1);
+		else
+			kill(pid, SIGUSR2);
+		bitshift /= 2;
+		usleep(400);
 	}
 }
 

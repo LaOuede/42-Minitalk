@@ -6,7 +6,7 @@
 /*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 10:10:07 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/13 11:05:39 by gle-roux         ###   ########.fr       */
+/*   Updated: 2023/03/13 14:54:29 by gle-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,18 +33,5 @@
 # define KMAG  "\x1B[35m"
 # define KCYN  "\x1B[36m"
 # define KWHT  "\x1B[37m"
-
-/* ----------------PARSING---------------- */
-
-/* ----------------STRUCTURES---------------- */
-typedef struct minitalk
-{
-	char	*msg;
-	int		size;
-	int		capacity;
-}			t_minitalk;
-
-
-/* ----------------UTILS---------------- */
 
 #endif

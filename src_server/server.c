@@ -6,7 +6,7 @@
 /*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 13:51:35 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/13 12:55:35 by gle-roux         ###   ########.fr       */
+/*   Updated: 2023/03/13 14:56:40 by gle-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,21 +175,15 @@ char	*ft_mem_alloc(char *str, int capacity)
 	int		i;
 	char	*tmp;
 
-	//ft_printf("check mem dyn alloc\n");
 	tmp = ft_calloc(sizeof(str), (capacity * 2));
-	if (!tmp)
-		return (NULL);
 	i = 0;
 	while (str[i++])
 		tmp[i] = str[i];
-	str = tmp;
-	free(tmp);
-	return (str);
+	return (tmp);
 }
 
 char	*ft_print_msg(char *str)
 {
-	//ft_printf("check print message\n");
 	ft_printf(KBLU "Message received :" KNRM "\n%s\n", str);
 	free(str);
 	str = NULL;
@@ -198,9 +192,9 @@ char	*ft_print_msg(char *str)
 
 char	*ft_stock_char(char *str, char c)
 {
-	static int	i;
-	static int	size;
-	static int	capacity;
+	static int	i = 0;
+	static int	size = 0;
+	static int	capacity = 2;
 
 	if (!str)
 	{
@@ -212,15 +206,11 @@ char	*ft_stock_char(char *str, char c)
 	str[i] = c;
 	i++;
 	size++;
-	//ft_printf("size = %d\n", size);
-	//ft_printf("i = %d\n", i);
-	//ft_printf("char = %c\n", str[i]);
 	if (size == capacity)
 	{
 		ft_mem_alloc(str, capacity);
 		capacity *= 2;
 	}
-	//ft_printf("capacity = %d\n", capacity);
 	return (str);
 }
 
@@ -229,7 +219,7 @@ void	handler_sigusr(int signum, siginfo_t *info, void *context)
 	static char	c = 0;
 	static int	bits = 0;
 	static char	*msg = NULL;
-	pid_t		pid_client = 0;
+	pid_t		pid_client;
 
 	(void)context;
 	if (info->si_pid)
@@ -238,13 +228,8 @@ void	handler_sigusr(int signum, siginfo_t *info, void *context)
 		c |= 128 >> bits;
 	if (++bits == 8)
 	{
-		//ft_printf("c = %c\n", c);
 		if (c != '\0')
-		{
-			//ft_printf("check add char\n");
 			msg = ft_stock_char(msg, c);
-			//ft_printf("msg = %s\n", msg);
-		}
 		if (c == '\0')
 		{
 			ft_print_msg(msg);
@@ -254,7 +239,6 @@ void	handler_sigusr(int signum, siginfo_t *info, void *context)
 		c = 0;
 		bits = 0;
 		kill(pid_client, SIGUSR1);
-		//ft_printf("---------------------\n");
 	}
 }
 
