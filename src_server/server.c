@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 13:51:35 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/13 14:56:40 by gle-roux         ###   ########.fr       */
+/*   Updated: 2023/03/13 17:17:30 by gwenolalero      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,7 +249,7 @@ int	main(void)
 
 	action.sa_handler = 0;
 	action.sa_sigaction = handler_sigusr;
-	action.sa_flags = SA_SIGINFO | SA_RESTART;
+	action.sa_flags = SA_SIGINFO;
 	pid = getpid();
 	ft_printf(KBLU "Server PID : %d\n" KNRM, pid);
 	ft_printf(KBLU KBLD"🔵 Server listening...\n" KNRM);
@@ -282,6 +282,32 @@ int	main(void)
 		free (buf);
 	}
 	free (buf);
+	ft_printf(KBLU KBLD"🔵 ./server closing...\n" KNRM);
+	return (0);
+} */
+
+
+/* int	main(void)
+{
+	pid_t				pid;
+	struct sigaction	action;
+	char				c = '\0';
+
+	action.sa_handler = 0;
+	action.sa_sigaction = handler_sigusr;
+	action.sa_flags = SA_SIGINFO | SA_RESTART;
+	pid = getpid();
+	ft_printf(KBLU "Server PID : %d\n" KNRM, pid);
+	ft_printf(KBLU KBLD"🔵 Server listening...\n" KNRM);
+	sigaction(SIGUSR1, &action, 0);
+	sigaction(SIGUSR2, &action, 0);
+	while (1)
+	{
+		printf("If you want to test memory leaks : send a message then type 'q'\n");
+		scanf("%c", &c);
+		if (c == 113)
+			break ;
+	}
 	ft_printf(KBLU KBLD"🔵 ./server closing...\n" KNRM);
 	return (0);
 } */
