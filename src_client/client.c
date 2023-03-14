@@ -6,7 +6,7 @@
 /*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 14:08:12 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/13 14:48:38 by gle-roux         ###   ########.fr       */
+/*   Updated: 2023/03/14 16:42:46 by gle-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,9 +246,24 @@ void	send_char(char c, int pid)
 		else
 			kill(pid, SIGUSR2);
 		bitshift /= 2;
-		usleep(400);
+		usleep(125);
 	}
 }
+
+/* void	send_char(char c, int pid)
+{
+	size_t	i = 0;
+
+	while (i++ < 8)
+	{
+		if (c & (c << 1))
+			kill(pid, SIGUSR2);
+		else
+			kill(pid, SIGUSR1);
+
+		usleep(100);
+	}
+} */
 
 void	send_str(char *str, int pid)
 {
@@ -270,8 +285,8 @@ static void	handler_sigusr(int signum)
 	{
 		ft_printf(KGRN KBLD "\n🟢 ./client : " KNRM KGRN
 			"Transmission ended succesfully\n" KNRM);
-		ft_printf(KGRN KBLD "Total bytes sent = " KNRM KGRN
-			"%d\n" KNRM, counter);
+		ft_printf(KGRN KBLD "🟢 ./client : " KNRM KGRN
+			"Total bytes sent = %d\n" KNRM, counter);
 		exit(EXIT_SUCCESS);
 	}
 }

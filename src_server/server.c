@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+        */
+/*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 13:51:35 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/13 17:17:30 by gwenolalero      ###   ########.fr       */
+/*   Updated: 2023/03/14 16:42:44 by gle-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,24 +170,30 @@ int	main(void)
 } */
 
 /* TEST 6 - Memory allocation and handling */
-char	*ft_mem_alloc(char *str, int capacity)
-{
-	int		i;
-	char	*tmp;
-
-	tmp = ft_calloc(sizeof(str), (capacity * 2));
-	i = 0;
-	while (str[i++])
-		tmp[i] = str[i];
-	return (tmp);
-}
-
 char	*ft_print_msg(char *str)
 {
 	ft_printf(KBLU "Message received :" KNRM "\n%s\n", str);
 	free(str);
 	str = NULL;
 	return (NULL);
+}
+
+char	*ft_mem_alloc(char *str, int capacity)
+{
+	int		i;
+	char	*new;
+
+	new = ft_calloc(sizeof(new), (capacity * 2));
+	if (!new)
+		return (0);
+	i = 0;
+	while (str[i])
+	{
+		new[i] = str[i];
+		i++;
+	}
+	free(str);
+	return (new);
 }
 
 char	*ft_stock_char(char *str, char c)
@@ -203,34 +209,33 @@ char	*ft_stock_char(char *str, char c)
 		capacity = 2;
 		str = ft_calloc(sizeof(str), capacity);
 	}
-	str[i] = c;
-	i++;
-	size++;
-	if (size == capacity)
+	str[i++] = c;
+	if (size++ == capacity)
 	{
-		ft_mem_alloc(str, capacity);
+		str = ft_mem_alloc(str, capacity);
 		capacity *= 2;
 	}
 	return (str);
 }
 
-void	handler_sigusr(int signum, siginfo_t *info, void *context)
+void	handler_sigusr(int signum, siginfo_t *info, void *ucontext)
 {
 	static char	c = 0;
 	static int	bits = 0;
 	static char	*msg = NULL;
 	pid_t		pid_client;
 
-	(void)context;
+	(void)ucontext;
 	if (info->si_pid)
 		pid_client = info->si_pid;
 	if (signum == SIGUSR1)
 		c |= 128 >> bits;
+		//c |= 8 << bits;
 	if (++bits == 8)
 	{
 		if (c != '\0')
 			msg = ft_stock_char(msg, c);
-		if (c == '\0')
+		else if (c == '\0')
 		{
 			ft_print_msg(msg);
 			msg = NULL;
@@ -263,47 +268,21 @@ int	main(void)
 /* int	main(void)
 {
 	pid_t				pid;
-	char				*buf;
-	struct sigaction	action;
-
-	action.sa_handler = 0;
-	action.sa_sigaction = handler_sigusr;
-	action.sa_flags = SA_SIGINFO | SA_RESTART;
-	pid = getpid();
-	ft_printf(KBLU "Server PID : %d\n" KNRM, pid);
-	ft_printf(KBLU KBLD"🔵 Server listening...\n" KNRM);
-	sigaction(SIGUSR1, &action, 0);
-	sigaction(SIGUSR2, &action, 0);
-	while (1)
-	{
-		buf = get_next_line(STDIN_FILENO);
-		if (*buf == 'q')
-			break ;
-		free (buf);
-	}
-	free (buf);
-	ft_printf(KBLU KBLD"🔵 ./server closing...\n" KNRM);
-	return (0);
-} */
-
-
-/* int	main(void)
-{
-	pid_t				pid;
 	struct sigaction	action;
 	char				c = '\0';
 
+	pid = getpid();
+	printf(KBLU "Server PID : %d\n" KNRM, pid);
+	ft_printf(KBLU KBLD"🔵 Server listening...\n" KNRM);
 	action.sa_handler = 0;
 	action.sa_sigaction = handler_sigusr;
 	action.sa_flags = SA_SIGINFO | SA_RESTART;
-	pid = getpid();
-	ft_printf(KBLU "Server PID : %d\n" KNRM, pid);
-	ft_printf(KBLU KBLD"🔵 Server listening...\n" KNRM);
 	sigaction(SIGUSR1, &action, 0);
 	sigaction(SIGUSR2, &action, 0);
 	while (1)
 	{
-		printf("If you want to test memory leaks : send a message then type 'q'\n");
+		printf("\n***** If you want to test memory leaks : 
+			send a message then type 'q' *****\n\n");
 		scanf("%c", &c);
 		if (c == 113)
 			break ;
