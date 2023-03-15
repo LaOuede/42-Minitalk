@@ -6,7 +6,7 @@
 /*   By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 14:08:12 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/15 12:13:03 by gwenolalero      ###   ########.fr       */
+/*   Updated: 2023/03/15 17:36:01 by gwenolalero      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -277,9 +277,11 @@ static void	handler_sigusr(int signum)
 } */
 
 /* TEST 7 - Linked list and structure */
+size_t		len;
+
 void	send_char(char c, int pid)
 {
-	size_t		i;
+	size_t	i;
 
 	i = 0;
 	while (i++ < 8)
@@ -297,27 +299,31 @@ void	send_str(char *str, int pid)
 {
 	static int	i = 0;
 
+	len = ft_strlen(str);
 	while (str[i])
 		send_char(str[i++], pid);
 	if (str[i] == '\0')
 		send_char('\0', pid);
 }
 
-static void	handler_sigusr(int signum)
+static void	handler_sigusr(int signum, siginfo_t *info, void *ucontext)
 {
+	(void)ucontext;
+	(void)info;
 	if (signum == SIGUSR1)
 	{
 		ft_printf(KGRN KBLD "🟢 ./client : " KNRM KGRN
-			"Transmission ended successfully\n" KNRM);
+			"Transmission ended successfully - [" KGRN KBLD "%d"
+			KNRM KGRN "] bytes sent\n" KNRM, len);
 		exit(EXIT_SUCCESS);
 	}
 }
 
 int	main(int argc, char **argv)
 {
-	pid_t	pid_server;
-	pid_t	pid_client;
-	char	*msg;
+	struct sigaction	action;
+	pid_t				pid_server;
+	pid_t				pid_client;
 
 	if (argc != 3 || ft_str_isdigit(argv[1]) == 0)
 	{
@@ -325,13 +331,14 @@ int	main(int argc, char **argv)
 		ft_printf(KRED "Usage: ./client <pid> <message_to_send>\n");
 		exit(EXIT_FAILURE);
 	}
+	action.sa_sigaction = handler_sigusr;
+	action.sa_flags = SA_SIGINFO;
 	pid_client = getpid();
 	ft_printf("Client PID : %d\n", pid_client);
-	msg = argv[2];
 	pid_server = atoi(argv[1]);
-	signal(SIGUSR1, handler_sigusr);
-	signal(SIGUSR2, handler_sigusr);
-	send_str(msg, pid_server);
+	sigaction(SIGUSR1, &action, 0);
+	sigaction(SIGUSR2, &action, 0);
+	send_str(argv[2], pid_server);
 	while (1)
 		pause();
 }

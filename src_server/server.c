@@ -6,7 +6,7 @@
 /*   By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 13:51:35 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/15 12:05:19 by gwenolalero      ###   ########.fr       */
+/*   Updated: 2023/03/15 17:36:42 by gwenolalero      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -272,17 +272,16 @@ int	main(void)
 	pid_t				pid;
 	struct sigaction	action;
 
-	action.sa_handler = 0;
 	action.sa_sigaction = handler_sigusr;
 	action.sa_flags = SA_SIGINFO;
 	sigemptyset(&action.sa_mask);
 	sigaddset(&action.sa_mask, SIGUSR1);
 	sigaddset(&action.sa_mask, SIGUSR2);
+	sigaction(SIGUSR1, &action, 0);
+	sigaction(SIGUSR2, &action, 0);
 	pid = getpid();
 	ft_printf(KBLU "Server PID : %d\n" KNRM, pid);
 	ft_printf(KBLU KBLD"🔵 Server listening...\n" KNRM);
-	sigaction(SIGUSR1, &action, 0);
-	sigaction(SIGUSR2, &action, 0);
 	while (1)
 		pause ();
 }
@@ -294,7 +293,6 @@ int	main(void)
 	struct sigaction	action;
 	char				c;
 
-	action.sa_handler = 0;
 	action.sa_sigaction = handler_sigusr;
 	action.sa_flags = SA_SIGINFO | SA_RESTART;
 	pid = getpid();

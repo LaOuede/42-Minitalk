@@ -6,7 +6,7 @@
 /*   By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 10:10:07 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/15 12:05:58 by gwenolalero      ###   ########.fr       */
+/*   Updated: 2023/03/15 15:40:09 by gwenolalero      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <unistd.h>
 # include <stdio.h>
 
-/* -----------------COLORS------------------ */
+/* --------------------COLORS--------------------- */
 # define KNRM  "\x1B[m"
 # define KBLD  "\x1B[1m"
 # define KGRE  "\x1B[2m"
