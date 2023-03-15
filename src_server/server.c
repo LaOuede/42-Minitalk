@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 13:51:35 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/14 16:42:44 by gle-roux         ###   ########.fr       */
+/*   Updated: 2023/03/15 12:05:19 by gwenolalero      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,7 @@ int	main(void)
 } */
 
 /* TEST 6 - Memory allocation and handling */
-char	*ft_print_msg(char *str)
+/* char	*ft_print_msg(char *str)
 {
 	ft_printf(KBLU "Message received :" KNRM "\n%s\n", str);
 	free(str);
@@ -245,6 +245,26 @@ void	handler_sigusr(int signum, siginfo_t *info, void *ucontext)
 		bits = 0;
 		kill(pid_client, SIGUSR1);
 	}
+} */
+
+/* TEST 7 - Linked list and structure */
+static void	handler_sigusr(int signum, siginfo_t *info, void *ucontext)
+{
+	static t_info	client;
+
+	(void)ucontext;
+	client.pid = info->si_pid;
+	if (signum == SIGUSR2)
+		client.c |= 128 >> client.bits;
+	if (++client.bits == 8)
+	{
+		if (client.c != '\0')
+			ft_add_back(&client.msg, ft_create_node(client.c));
+		else if (client.c == '\0')
+			ft_print_msg(&client);
+		client.c = 0;
+		client.bits = 0;
+	}
 }
 
 int	main(void)
@@ -255,6 +275,9 @@ int	main(void)
 	action.sa_handler = 0;
 	action.sa_sigaction = handler_sigusr;
 	action.sa_flags = SA_SIGINFO;
+	sigemptyset(&action.sa_mask);
+	sigaddset(&action.sa_mask, SIGUSR1);
+	sigaddset(&action.sa_mask, SIGUSR2);
 	pid = getpid();
 	ft_printf(KBLU "Server PID : %d\n" KNRM, pid);
 	ft_printf(KBLU KBLD"🔵 Server listening...\n" KNRM);
@@ -269,20 +292,19 @@ int	main(void)
 {
 	pid_t				pid;
 	struct sigaction	action;
-	char				c = '\0';
+	char				c;
 
-	pid = getpid();
-	printf(KBLU "Server PID : %d\n" KNRM, pid);
-	ft_printf(KBLU KBLD"🔵 Server listening...\n" KNRM);
 	action.sa_handler = 0;
 	action.sa_sigaction = handler_sigusr;
 	action.sa_flags = SA_SIGINFO | SA_RESTART;
+	pid = getpid();
+	printf(KBLU "Server PID : %d\n" KNRM, pid);
+	ft_printf(KBLU KBLD"🔵 Server listening...\n" KNRM);
 	sigaction(SIGUSR1, &action, 0);
 	sigaction(SIGUSR2, &action, 0);
 	while (1)
 	{
-		printf("\n***** If you want to test memory leaks : 
-			send a message then type 'q' *****\n\n");
+		printf("\n*** To test mem leaks : send a message and type 'q' ***\n\n");
 		scanf("%c", &c);
 		if (c == 113)
 			break ;

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+         #
+#    By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/26 12:57:00 by gle-roux          #+#    #+#              #
-#    Updated: 2023/03/13 14:56:09 by gle-roux         ###   ########.fr        #
+#    Updated: 2023/03/15 12:06:48 by gwenolalero      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -85,7 +85,8 @@ SRCS_C_LIST	=	client.c
 SRCS_C		=	$(addprefix $(SRCS_C_DIR), $(SRCS_C_LIST))
 
 SRCS_S_DIR	=	./src_server/
-SRCS_S_LIST	=	server.c
+SRCS_S_LIST	=	server.c \
+				utils.c
 SRCS_S		=	$(addprefix $(SRCS_S_DIR), $(SRCS_S_LIST))
 
 OBJS_DIR	=	./obj/

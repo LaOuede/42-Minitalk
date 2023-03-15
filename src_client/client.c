@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 14:08:12 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/14 16:42:46 by gle-roux         ###   ########.fr       */
+/*   Updated: 2023/03/15 12:13:03 by gwenolalero      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,7 +234,7 @@ void	send_char(char c, int pid)
 } */
 
 /* TEST 6 - Memory allocation and handling */
-void	send_char(char c, int pid)
+/* void	send_char(char c, int pid)
 {
 	static int	bitshift = 0;
 
@@ -249,21 +249,6 @@ void	send_char(char c, int pid)
 		usleep(125);
 	}
 }
-
-/* void	send_char(char c, int pid)
-{
-	size_t	i = 0;
-
-	while (i++ < 8)
-	{
-		if (c & (c << 1))
-			kill(pid, SIGUSR2);
-		else
-			kill(pid, SIGUSR1);
-
-		usleep(100);
-	}
-} */
 
 void	send_str(char *str, int pid)
 {
@@ -289,6 +274,43 @@ static void	handler_sigusr(int signum)
 			"Total bytes sent = %d\n" KNRM, counter);
 		exit(EXIT_SUCCESS);
 	}
+} */
+
+/* TEST 7 - Linked list and structure */
+void	send_char(char c, int pid)
+{
+	size_t		i;
+
+	i = 0;
+	while (i++ < 8)
+	{
+		if (c & 128)
+			kill(pid, SIGUSR2);
+		else
+			kill(pid, SIGUSR1);
+		c <<= 1;
+		usleep(40);
+	}
+}
+
+void	send_str(char *str, int pid)
+{
+	static int	i = 0;
+
+	while (str[i])
+		send_char(str[i++], pid);
+	if (str[i] == '\0')
+		send_char('\0', pid);
+}
+
+static void	handler_sigusr(int signum)
+{
+	if (signum == SIGUSR1)
+	{
+		ft_printf(KGRN KBLD "🟢 ./client : " KNRM KGRN
+			"Transmission ended successfully\n" KNRM);
+		exit(EXIT_SUCCESS);
+	}
 }
 
 int	main(int argc, char **argv)
@@ -304,7 +326,7 @@ int	main(int argc, char **argv)
 		exit(EXIT_FAILURE);
 	}
 	pid_client = getpid();
-	ft_printf(KMAG KBLD "🟣 Client PID : "KNRM KMAG "%d\n" KNRM, pid_client);
+	ft_printf("Client PID : %d\n", pid_client);
 	msg = argv[2];
 	pid_server = atoi(argv[1]);
 	signal(SIGUSR1, handler_sigusr);

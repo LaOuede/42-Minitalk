@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minitalk.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 10:10:07 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/14 10:26:14 by gle-roux         ###   ########.fr       */
+/*   Updated: 2023/03/15 12:05:58 by gwenolalero      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <unistd.h>
 # include <stdio.h>
 
-/* ----------------COLORS---------------- */
+/* -----------------COLORS------------------ */
 # define KNRM  "\x1B[m"
 # define KBLD  "\x1B[1m"
 # define KGRE  "\x1B[2m"
@@ -33,5 +33,26 @@
 # define KMAG  "\x1B[35m"
 # define KCYN  "\x1B[36m"
 # define KWHT  "\x1B[37m"
+
+/* -------------------STRUCTURES------------------- */
+typedef struct s_msg
+{
+	char			data;
+	struct s_msg	*next;
+}					t_msg;
+
+typedef struct s_info
+{
+	char	c;
+	t_msg	*msg;
+	int		bits;
+	pid_t	pid;
+}			t_info;
+
+/* ----------------UTILS FUNCTIONS----------------- */
+void	ft_add_back(t_msg **msg, t_msg *node);
+t_msg	*ft_create_node(char c);
+void	ft_free_msg(t_msg **msg);
+void	ft_print_msg(t_info *client);
 
 #endif
