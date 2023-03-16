@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   utils_s.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 09:47:24 by gwenolalero       #+#    #+#             */
-/*   Updated: 2023/03/16 16:00:36 by gle-roux         ###   ########.fr       */
+/*   Updated: 2023/03/16 18:44:21 by gwenolalero      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minitalk.h"
 
-t_info	*ft_init_server()
+t_receive	*ft_init_server(void)
 {
-	t_info	*init;
+	t_receive	*init;
 
-	init = ft_calloc(sizeof(t_send), 1);
-	init->c = 0;
+	init = ft_calloc(sizeof(t_receive), 1);
+	init->byte = 0;
 	init->bits = 0;
 	init->pid_c = 0;
 	init->pid_s = getpid();
@@ -39,7 +39,7 @@ void	ft_free_msg(t_msg **msg)
 	*msg = NULL;
 }
 
-void	ft_print_msg(t_info *server)
+void	ft_print_msg(t_receive *server)
 {
 	t_msg	*ptr;
 

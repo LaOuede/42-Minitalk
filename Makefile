@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+         #
+#    By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/26 12:57:00 by gle-roux          #+#    #+#              #
-#    Updated: 2023/03/16 15:27:58 by gle-roux         ###   ########.fr        #
+#    Updated: 2023/03/16 18:52:01 by gwenolalero      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -120,7 +120,7 @@ USER		=	$(shell whoami)
 # Creation of the executable
 all: dir $(CLIENT) $(SERVER)
 	@echo $Y"$$BANNER1"$W
-	@echo "				$Z...made by $Ygle-roux$Z$W"
+	@echo "				$Z...made by $Ygle-roux$Z$W🐭"
 	@echo "					$Z...evaluated by $Y$(USER)\n\n$W"
 
 # Compile

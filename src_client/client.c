@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 14:08:12 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/16 16:00:28 by gle-roux         ###   ########.fr       */
+/*   Updated: 2023/03/16 19:00:35 by gwenolalero      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -277,29 +277,96 @@ static void	handler_sigusr(int signum)
 } */
 
 /* TEST 7 - Linked list and structure */
-static t_send		*msg;
+/* size_t		len;
 
-void	ft_error()
+void	send_char(char c, int pid)
 {
+	size_t	i;
+
+	i = 0;
+	while (i++ < 8)
+	{
+		if (c & 128)
+			kill(pid, SIGUSR2);
+		else
+			kill(pid, SIGUSR1);
+		c <<= 1;
+		usleep(40);
+	}
+}
+
+void	send_str(char *str, int pid)
+{
+	static int	i = 0;
+
+	len = ft_strlen(str);
+	while (str[i])
+		send_char(str[i++], pid);
+	if (str[i] == '\0')
+		send_char('\0', pid);
+}
+
+static void	handler_sigusr(int signum, siginfo_t *info, void *ucontext)
+{
+	(void)ucontext;
+	(void)info;
+	if (signum == SIGUSR1)
+	{
+		ft_printf(KGRN KBLD "🟢 ./client : " KNRM KGRN
+			"Transmission ended successfully - [" KGRN KBLD "%d"
+			KNRM KGRN "] bytes sent\n" KNRM, len);
+		exit(EXIT_SUCCESS);
+	}
+}
+
+int	main(int argc, char **argv)
+{
+	struct sigaction	action;
+	pid_t				pid_server;
+	pid_t				pid_client;
+
+	if (argc != 3 || ft_str_isdigit(argv[1]) == 0)
+	{
+		ft_printf(KRED KBLD "🔴 Invalid arguments\n" KNRM);
+		ft_printf(KRED "Usage: ./client <pid> <message_to_send>\n");
+		exit(EXIT_FAILURE);
+	}
+	action.sa_sigaction = handler_sigusr;
+	action.sa_flags = SA_SIGINFO;
+	pid_client = getpid();
+	ft_printf("Client PID : %d\n", pid_client);
+	pid_server = atoi(argv[1]);
+	sigaction(SIGUSR1, &action, 0);
+	sigaction(SIGUSR2, &action, 0);
+	send_str(argv[2], pid_server);
+	while (1)
+		pause();
+} */
+
+/* TEST 8 - Without usleep */
+static t_send	*g_msg;
+
+void	ft_error(void)
+{
+	if (g_msg->msg)
+		free(g_msg->msg);
+	if (g_msg)
+		free(g_msg);
 	ft_printf(KRED KBLD "🔴 ./client : " KNRM KRED
-	"Transmission ended unexpectedly");
+		"Transmission ended unexpectedly (" KUND KRED
+		"Server PID ?" KNRM ") 🚨\n");
 	exit(EXIT_FAILURE);
 }
 
-/* void	send_str(t_send *msg)
+void	ft_end_com(void)
 {
-	static int	i = 0;
-	if (msg->msg[i] != '\0')
-	{
-		ft_printf("check bit\n");
-		send_char(msg->msg[i++], msg->pid_s);
-	}
-	if (msg->msg[i] == '\0')
-	{
-		ft_printf("check null\n");
-		send_char('\0', msg->pid_s);
-	}
-} */
+	ft_printf(KGRN KBLD "🟢 ./client : " KNRM KGRN
+		"Transmission ended successfully - [" KGRN KBLD "%d"
+		KNRM KGRN "] bytes sent 📤\n" KNRM, g_msg->bytes_sent);
+	free(g_msg->msg);
+	free(g_msg);
+	exit(EXIT_SUCCESS);
+}
 
 static void	handler_sigusr(int signum, siginfo_t *info, void *ucontext)
 {
@@ -307,43 +374,24 @@ static void	handler_sigusr(int signum, siginfo_t *info, void *ucontext)
 
 	(void)info;
 	(void)ucontext;
+	flag = 0;
 	if (signum == SIGUSR1)
-	{
-		ft_printf(KGRN KBLD "🟢 ./client : " KNRM KGRN
-			"Transmission ended successfully - [" KGRN KBLD "%d"
-			KNRM KGRN "] bytes sent\n" KNRM, msg->len);
-		exit(EXIT_SUCCESS);
-	}
+		ft_end_com();
 	if (signum == SIGUSR2)
 	{
-		if (msg->msg[msg->index] != '\0')
+		if (g_msg->len >= 0 && g_msg->msg[g_msg->index] & 128)
+			flag = kill(g_msg->pid_s, SIGUSR2);
+		else
+			flag = kill(g_msg->pid_s, SIGUSR1);
+		g_msg->msg[g_msg->index] <<= 1;
+		if (++g_msg->bits == 8)
 		{
-			if (msg->msg[msg->index] & 128)
-			{
-				flag = kill(msg->pid_s, SIGUSR2);
-				msg->msg[msg->index] <<= 1;
-			}
-			else
-			{
-				flag = kill(msg->pid_s, SIGUSR1);
-				msg->msg[msg->index] <<= 1;
-			}
-			if (flag == -1)
-				ft_error();
+			g_msg->bits = 0;
+			g_msg->index++;
+			g_msg->len --;
 		}
-		else if (msg->msg[msg->index] == '\0')
-		{
-			flag = kill(msg->pid_s, SIGUSR1);
-			msg->msg[msg->index] <<= 1;
-			if (flag == -1)
-				ft_error();
-		}
-		if (++msg->bits == 8)
-		{
-			msg->bits = 0;
-			msg->index++;
-		}
-		ft_printf("index : %d\n", msg->index);
+		if (flag == -1)
+			ft_error();
 	}
 }
 
@@ -353,17 +401,20 @@ int	main(int argc, char **argv)
 
 	if (argc != 3 || ft_str_isdigit(argv[1]) == 0)
 	{
-		ft_printf(KRED KBLD "🔴 Invalid arguments\n" KNRM);
-		ft_printf(KRED "Usage: ./client <pid> <message_to_send>\n" KNRM);
+		ft_printf(KYEL KBLD "🟡 Invalid arguments\n" KNRM);
+		ft_printf(KYEL "Usage: ./client <pid> <message_to_send> 🫵\n" KNRM);
 		exit(EXIT_FAILURE);
 	}
+	sigemptyset(&action.sa_mask);
+	sigaddset(&action.sa_mask, SIGUSR1);
+	sigaddset(&action.sa_mask, SIGUSR2);
 	action.sa_sigaction = handler_sigusr;
 	action.sa_flags = SA_SIGINFO;
-	msg = ft_init(argv[1], argv[2]);
+	g_msg = ft_init_client(argv[1], argv[2]);
 	sigaction(SIGUSR1, &action, 0);
 	sigaction(SIGUSR2, &action, 0);
-	ft_printf("PID  = %d\n", SIGUSR1);
-	kill(msg->pid_c, SIGUSR2);
+	ft_printf("Client PID  = %d\n", g_msg->pid_c);
+	kill(g_msg->pid_c, SIGUSR2);
 	while (1)
 		pause();
 	return (0);

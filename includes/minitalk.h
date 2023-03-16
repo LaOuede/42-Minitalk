@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minitalk.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 10:10:07 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/16 15:40:29 by gle-roux         ###   ########.fr       */
+/*   Updated: 2023/03/16 17:26:20 by gwenolalero      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,14 @@ typedef struct s_msg
 	struct s_msg	*next;
 }					t_msg;
 
-typedef struct s_info
+typedef struct s_receive
 {
-	char	c;
+	char	byte;
 	t_msg	*msg;
 	int		bits;
 	pid_t	pid_c;
 	pid_t	pid_s;
-}			t_info;
+}			t_receive;
 
 typedef struct s_send
 {
@@ -63,11 +63,11 @@ typedef struct s_send
 }			t_send;
 
 /* ----------------UTILS FUNCTIONS----------------- */
-void	ft_add_back(t_msg **msg, t_msg *node);
-t_msg	*ft_create_node(char c);
-void	ft_free_msg(t_msg **msg);
-t_send	*ft_init(char *pid, char *str);
-t_info	*ft_init_server();
-void	ft_print_msg(t_info *client);
+void		ft_add_back(t_msg **msg, t_msg *node);
+t_msg		*ft_create_node(char c);
+void		ft_free_msg(t_msg **msg);
+t_send		*ft_init_client(char *pid, char *str);
+t_receive	*ft_init_server(void);
+void		ft_print_msg(t_receive *client);
 
 #endif
