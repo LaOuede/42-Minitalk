@@ -1,16 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   utils_s.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+        */
+/*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 09:47:24 by gwenolalero       #+#    #+#             */
-/*   Updated: 2023/03/15 11:40:24 by gwenolalero      ###   ########.fr       */
+/*   Updated: 2023/03/16 16:00:36 by gle-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minitalk.h"
+
+t_info	*ft_init_server()
+{
+	t_info	*init;
+
+	init = ft_calloc(sizeof(t_send), 1);
+	init->c = 0;
+	init->bits = 0;
+	init->pid_c = 0;
+	init->pid_s = getpid();
+	return (init);
+}
 
 void	ft_free_msg(t_msg **msg)
 {
@@ -27,11 +39,11 @@ void	ft_free_msg(t_msg **msg)
 	*msg = NULL;
 }
 
-void	ft_print_msg(t_info *client)
+void	ft_print_msg(t_info *server)
 {
 	t_msg	*ptr;
 
-	ptr = client->msg;
+	ptr = server->msg;
 	ft_printf(KBLU "Message received :\n" KNRM);
 	while (ptr)
 	{
@@ -39,8 +51,8 @@ void	ft_print_msg(t_info *client)
 		ptr = ptr->next;
 	}
 	write(1, "\n", 1);
-	ft_free_msg(&client->msg);
-	kill(client->pid, SIGUSR1);
+	ft_free_msg(&server->msg);
+	kill(server->pid_c, SIGUSR1);
 }
 
 t_msg	*ft_create_node(char c)

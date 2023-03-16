@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minitalk.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+        */
+/*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 10:10:07 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/15 15:40:09 by gwenolalero      ###   ########.fr       */
+/*   Updated: 2023/03/16 15:40:29 by gle-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@
 # define KWHT  "\x1B[37m"
 
 /* -------------------STRUCTURES------------------- */
+
 typedef struct s_msg
 {
 	char			data;
@@ -46,13 +47,27 @@ typedef struct s_info
 	char	c;
 	t_msg	*msg;
 	int		bits;
-	pid_t	pid;
+	pid_t	pid_c;
+	pid_t	pid_s;
 }			t_info;
+
+typedef struct s_send
+{
+	size_t	len;
+	int		bytes_sent;
+	char	*msg;
+	pid_t	pid_c;
+	pid_t	pid_s;
+	int		bits;
+	int		index;
+}			t_send;
 
 /* ----------------UTILS FUNCTIONS----------------- */
 void	ft_add_back(t_msg **msg, t_msg *node);
 t_msg	*ft_create_node(char c);
 void	ft_free_msg(t_msg **msg);
+t_send	*ft_init(char *pid, char *str);
+t_info	*ft_init_server();
 void	ft_print_msg(t_info *client);
 
 #endif

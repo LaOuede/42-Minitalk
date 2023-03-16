@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+        */
+/*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 13:51:35 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/15 17:36:42 by gwenolalero      ###   ########.fr       */
+/*   Updated: 2023/03/16 16:00:33 by gle-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,42 +248,47 @@ void	handler_sigusr(int signum, siginfo_t *info, void *ucontext)
 } */
 
 /* TEST 7 - Linked list and structure */
+static t_info	server;
+
 static void	handler_sigusr(int signum, siginfo_t *info, void *ucontext)
 {
-	static t_info	client;
+	static char byte = 0;
 
 	(void)ucontext;
-	client.pid = info->si_pid;
+	server.pid_c = info->si_pid;
 	if (signum == SIGUSR2)
-		client.c |= 128 >> client.bits;
-	if (++client.bits == 8)
+		byte |= 128 >> server.bits;
+	ft_printf("c : %d\n", byte);
+	if (++server.bits == 8)
 	{
-		if (client.c != '\0')
-			ft_add_back(&client.msg, ft_create_node(client.c));
-		else if (client.c == '\0')
-			ft_print_msg(&client);
-		client.c = 0;
-		client.bits = 0;
+		if (byte != '\0')
+		{
+			ft_add_back(&server.msg, ft_create_node(byte));
+			kill(server.pid_c, SIGUSR2);
+		}
+		else if (byte == '\0')
+			ft_print_msg(&server);
+		byte = 0;
+		server.bits = 0;
 	}
+	else
+		kill(server.pid_c, SIGUSR2);
 }
 
 int	main(void)
 {
-	pid_t				pid;
 	struct sigaction	action;
 
-	action.sa_sigaction = handler_sigusr;
 	action.sa_flags = SA_SIGINFO;
-	sigemptyset(&action.sa_mask);
-	sigaddset(&action.sa_mask, SIGUSR1);
-	sigaddset(&action.sa_mask, SIGUSR2);
+	action.sa_sigaction = handler_sigusr;
 	sigaction(SIGUSR1, &action, 0);
 	sigaction(SIGUSR2, &action, 0);
-	pid = getpid();
-	ft_printf(KBLU "Server PID : %d\n" KNRM, pid);
+	server = *ft_init_server();
+	ft_printf(KBLU "Server PID : %d\n" KNRM, server.pid_s);
 	ft_printf(KBLU KBLD"🔵 Server listening...\n" KNRM);
 	while (1)
 		pause ();
+	return (0);
 }
 
 /* Main design to test memory leaks tipping "q" on the server*/
