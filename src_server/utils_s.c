@@ -6,37 +6,39 @@
 /*   By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 09:47:24 by gwenolalero       #+#    #+#             */
-/*   Updated: 2023/03/16 18:44:21 by gwenolalero      ###   ########.fr       */
+/*   Updated: 2023/03/16 20:25:54 by gwenolalero      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minitalk.h"
 
-t_receive	*ft_init_server(void)
+void	ft_add_back(t_msg **msg, t_msg *node)
 {
-	t_receive	*init;
+	t_msg	*last;
 
-	init = ft_calloc(sizeof(t_receive), 1);
-	init->byte = 0;
-	init->bits = 0;
-	init->pid_c = 0;
-	init->pid_s = getpid();
-	return (init);
+	if (!node)
+		return ;
+	if (*msg == NULL)
+	{
+		*msg = node;
+		return ;
+	}
+	last = *msg;
+	while (last->next != NULL)
+		last = last->next;
+	last->next = node;
 }
 
-void	ft_free_msg(t_msg **msg)
+t_msg	*ft_create_node(char c)
 {
-	t_msg	*ptr;
+	t_msg	*new_node;
 
-	if (!msg || !*msg)
-		return ;
-	while (*msg)
-	{
-		ptr = (*msg)->next;
-		free(*msg);
-		*msg = ptr;
-	}
-	*msg = NULL;
+	new_node = ft_calloc(sizeof(*new_node), 1);
+	if (!new_node)
+		return (NULL);
+	new_node->data = c;
+	new_node->next = NULL;
+	return (new_node);
 }
 
 void	ft_print_msg(t_receive *server)
@@ -55,31 +57,17 @@ void	ft_print_msg(t_receive *server)
 	kill(server->pid_c, SIGUSR1);
 }
 
-t_msg	*ft_create_node(char c)
+void	ft_free_msg(t_msg **msg)
 {
-	t_msg	*new_node;
+	t_msg	*ptr;
 
-	new_node = ft_calloc(sizeof(*new_node), 1);
-	if (!new_node)
-		return (NULL);
-	new_node->data = c;
-	new_node->next = NULL;
-	return (new_node);
-}
-
-void	ft_add_back(t_msg **msg, t_msg *node)
-{
-	t_msg	*last;
-
-	if (!node)
+	if (!msg || !*msg)
 		return ;
-	if (*msg == NULL)
+	while (*msg)
 	{
-		*msg = node;
-		return ;
+		ptr = (*msg)->next;
+		free(*msg);
+		*msg = ptr;
 	}
-	last = *msg;
-	while (last->next != NULL)
-		last = last->next;
-	last->next = node;
+	*msg = NULL;
 }

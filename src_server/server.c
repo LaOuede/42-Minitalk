@@ -6,7 +6,7 @@
 /*   By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 13:51:35 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/16 18:44:31 by gwenolalero      ###   ########.fr       */
+/*   Updated: 2023/03/16 20:26:10 by gwenolalero      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -308,7 +308,19 @@ int	main(void)
 /* TEST 8 - Without usleep */
 static t_receive	g_server;
 
-static void	handler_sigusr(int signum, siginfo_t *info, void *ucontext)
+t_receive	*ft_init_server(void)
+{
+	t_receive	*init;
+
+	init = ft_calloc(sizeof(t_receive), 1);
+	init->byte = 0;
+	init->bits = 0;
+	init->pid_c = 0;
+	init->pid_s = getpid();
+	return (init);
+}
+
+static void	handler_receiving(int signum, siginfo_t *info, void *ucontext)
 {
 	(void)ucontext;
 	if (info->si_pid)
@@ -339,10 +351,10 @@ int	main(void)
 	sigaddset(&action.sa_mask, SIGUSR1);
 	sigaddset(&action.sa_mask, SIGUSR2);
 	action.sa_flags = SA_SIGINFO;
-	action.sa_sigaction = handler_sigusr;
+	action.sa_sigaction = handler_receiving;
+	g_server = *ft_init_server();
 	sigaction(SIGUSR1, &action, 0);
 	sigaction(SIGUSR2, &action, 0);
-	g_server = *ft_init_server();
 	ft_printf(KBLU "Server PID : %d\n" KNRM, g_server.pid_s);
 	ft_printf(KBLU KBLD"🔵 Server listening... 🤖 \n" KNRM);
 	while (1)

@@ -6,7 +6,7 @@
 #    By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/26 12:57:00 by gle-roux          #+#    #+#              #
-#    Updated: 2023/03/16 18:52:01 by gwenolalero      ###   ########.fr        #
+#    Updated: 2023/03/16 20:17:35 by gwenolalero      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -81,8 +81,7 @@ SERVER		=	server
 
 # Dir. and files names
 SRCS_C_DIR	=	./src_client/
-SRCS_C_LIST	=	client.c \
-				utils_c.c
+SRCS_C_LIST	=	client.c
 SRCS_C		=	$(addprefix $(SRCS_C_DIR), $(SRCS_C_LIST))
 
 SRCS_S_DIR	=	./src_server/

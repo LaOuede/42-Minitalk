@@ -6,7 +6,7 @@
 /*   By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 14:08:12 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/16 19:00:35 by gwenolalero      ###   ########.fr       */
+/*   Updated: 2023/03/16 20:13:42 by gwenolalero      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -368,7 +368,22 @@ void	ft_end_com(void)
 	exit(EXIT_SUCCESS);
 }
 
-static void	handler_sigusr(int signum, siginfo_t *info, void *ucontext)
+t_send	*ft_init_client(char *pid, char *str)
+{
+	t_send	*init;
+
+	init = ft_calloc(sizeof(t_send), 1);
+	init->len = ft_strlen(str);
+	init->bytes_sent = ft_strlen(str);
+	init->msg = ft_strdup(str);
+	init->pid_c = getpid();
+	init->pid_s = atoi(pid);
+	init->bits = 0;
+	init->index = 0;
+	return (init);
+}
+
+static void	handler_sending(int signum, siginfo_t *info, void *ucontext)
 {
 	int	flag;
 
@@ -408,8 +423,8 @@ int	main(int argc, char **argv)
 	sigemptyset(&action.sa_mask);
 	sigaddset(&action.sa_mask, SIGUSR1);
 	sigaddset(&action.sa_mask, SIGUSR2);
-	action.sa_sigaction = handler_sigusr;
 	action.sa_flags = SA_SIGINFO;
+	action.sa_sigaction = handler_sending;
 	g_msg = ft_init_client(argv[1], argv[2]);
 	sigaction(SIGUSR1, &action, 0);
 	sigaction(SIGUSR2, &action, 0);
