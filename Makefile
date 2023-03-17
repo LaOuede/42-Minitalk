@@ -6,7 +6,7 @@
 #    By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/26 12:57:00 by gle-roux          #+#    #+#              #
-#    Updated: 2023/03/16 20:17:35 by gwenolalero      ###   ########.fr        #
+#    Updated: 2023/03/16 20:29:26 by gwenolalero      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -129,8 +129,8 @@ $(CLIENT): $(OBJS_C)
 	@$(CC) $(CFLAGS) $(SRCS_C) $(LIBFT) $(PRINTF) -o $(CLIENT)
 
 $(SERVER): $(OBJS_S)
-	@echo "\n\n$W---------------------- $Zminitalk is $Gdone ✅ $W---------------------"
-	@echo "\n$W--------------------------- $Zlibft.a $W----------------------------"
+	@echo "\n\n$W--------------------- $Zminitalk is $Gdone ✅ $W---------------------"
+	@echo "\n$W-------------------------- $Zlibft.a $W----------------------------"
 	@make -C $(LIBFT_DIR)
 	@echo "\n$W-------------------------- $Zprintf.a $W---------------------------"
 	@make -C $(PRINTF_DIR)
