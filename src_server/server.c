@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 13:51:35 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/17 13:21:00 by gle-roux         ###   ########.fr       */
+/*   Updated: 2023/03/17 15:15:20 by gwenolalero      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -343,7 +343,6 @@ static void	handler_receiving(int signum, siginfo_t *info, void *ucontext)
 		kill(g_server.pid_c, SIGUSR2);
 } */
 
-
 /* TEST 9 - Blocking signals */
 static t_receive	*g_server;
 
@@ -374,10 +373,7 @@ static t_receive	*ft_reboot(int pid)
 
 static void	handler_receiving(int signum, siginfo_t *info, void *ucontext)
 {
-	int	flag;
-
 	(void)ucontext;
-	flag = 0;
 	if (info->si_pid != g_server->pid_c && info->si_pid != 0)
 		ft_reboot(info->si_pid);
 	if (signum == SIGUSR2)
@@ -387,7 +383,7 @@ static void	handler_receiving(int signum, siginfo_t *info, void *ucontext)
 		if (g_server->byte != '\0')
 		{
 			ft_add_back(&g_server->msg, ft_create_node(g_server->byte));
-			flag = kill(g_server->pid_c, SIGUSR2);
+			kill(g_server->pid_c, SIGUSR2);
 		}
 		else if (g_server->byte == '\0')
 			ft_print_msg(g_server);
@@ -395,7 +391,7 @@ static void	handler_receiving(int signum, siginfo_t *info, void *ucontext)
 		g_server->bits = 0;
 	}
 	else
-		flag = kill(g_server->pid_c, SIGUSR2);
+		kill(g_server->pid_c, SIGUSR2);
 }
 
 int	main(void)
