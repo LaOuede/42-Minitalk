@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 14:08:12 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/17 13:07:45 by gle-roux         ###   ########.fr       */
+/*   Updated: 2023/03/17 16:13:14 by gwenolalero      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -416,7 +416,7 @@ int	main(int argc, char **argv)
 
 	if (argc != 3 || ft_str_isdigit(argv[1]) == 0)
 	{
-		ft_printf(KYEL "🟡 Usage: ./client <pid> <message_to_send> 🖖\n" KNRM);
+		ft_printf(KYEL "🟡 Usage : ./client <pid> <message_to_send> 🖖\n" KNRM);
 		exit(EXIT_FAILURE);
 	}
 	action.sa_flags = SA_SIGINFO;
@@ -428,5 +428,6 @@ int	main(int argc, char **argv)
 	kill(g_msg->pid_c, SIGUSR2);
 	while (1)
 		pause();
+	free(g_msg);
 	return (0);
 }

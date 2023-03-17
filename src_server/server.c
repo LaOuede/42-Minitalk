@@ -6,7 +6,7 @@
 /*   By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 13:51:35 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/17 15:15:20 by gwenolalero      ###   ########.fr       */
+/*   Updated: 2023/03/17 16:31:45 by gwenolalero      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -358,12 +358,25 @@ static t_receive	*ft_init_server(void)
 	return (init);
 }
 
+void	ft_error(void)
+{
+	if (g_server->msg)
+		free(g_server->msg);
+	if (g_server)
+		free(g_server);
+	ft_printf(KRED KBLD "🔴 ./server : " KNRM KRED
+		"Transmission ended unexpectedly 🚨\n" KNRM);
+	exit(EXIT_FAILURE);
+}
+
 static t_receive	*ft_reboot(int pid)
 {
 	if (g_server->msg)
 	{
 		ft_print_msg(g_server);
-		ft_free_msg(&g_server->msg);
+		free(g_server);
+		g_server = NULL;
+		g_server = ft_init_server();
 	}
 	g_server->byte = 0;
 	g_server->bits = 0;
@@ -373,7 +386,10 @@ static t_receive	*ft_reboot(int pid)
 
 static void	handler_receiving(int signum, siginfo_t *info, void *ucontext)
 {
+	int	flag;
+
 	(void)ucontext;
+	flag = 0;
 	if (info->si_pid != g_server->pid_c && info->si_pid != 0)
 		ft_reboot(info->si_pid);
 	if (signum == SIGUSR2)
@@ -383,7 +399,7 @@ static void	handler_receiving(int signum, siginfo_t *info, void *ucontext)
 		if (g_server->byte != '\0')
 		{
 			ft_add_back(&g_server->msg, ft_create_node(g_server->byte));
-			kill(g_server->pid_c, SIGUSR2);
+			flag = kill(g_server->pid_c, SIGUSR2);
 		}
 		else if (g_server->byte == '\0')
 			ft_print_msg(g_server);
@@ -391,13 +407,22 @@ static void	handler_receiving(int signum, siginfo_t *info, void *ucontext)
 		g_server->bits = 0;
 	}
 	else
-		kill(g_server->pid_c, SIGUSR2);
+		flag = kill(g_server->pid_c, SIGUSR2);
+	if (flag == -1)
+		ft_error();
 }
 
-int	main(void)
+int	main(int argc, char **argv)
 {
 	struct sigaction	action;
 
+	(void) argv;
+	if (argc != 1)
+	{
+		ft_printf(KYEL "🟡 Usage : ./server 🖖\n" KNRM);
+		ft_printf(KYEL "  No argument needed\n" KNRM);
+		exit(EXIT_FAILURE);
+	}
 	g_server = ft_init_server();
 	action.sa_flags = SA_SIGINFO;
 	action.sa_sigaction = handler_receiving;
@@ -407,6 +432,7 @@ int	main(void)
 	ft_printf(KBLU KBLD"🔵 Server listening... 📟 \n\n" KNRM);
 	while (1)
 		pause ();
+	free(g_server);
 	return (0);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_s.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 09:47:24 by gwenolalero       #+#    #+#             */
-/*   Updated: 2023/03/17 13:19:06 by gle-roux         ###   ########.fr       */
+/*   Updated: 2023/03/17 16:36:00 by gwenolalero      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ void	ft_print_msg(t_receive *server)
 	static int		counter;
 
 	counter++;
-	
 	ft_printf(KBLU "Message received from client [" KBLU KBLD "%d"
 		KNRM KBLU "] :\n" KNRM, server->pid_c);
 	ptr = server->msg;
@@ -57,7 +56,8 @@ void	ft_print_msg(t_receive *server)
 		ptr = ptr->next;
 	}
 	write(1, "\n", 1);
-	ft_printf(KBLU "End of transmission [" KBLU KBLD "%d" KNRM KBLU "] \n\n" KNRM, counter);
+	ft_printf(KBLU "End of transmission [" KBLU KBLD "%d" KNRM KBLU
+		"] \n\n" KNRM, counter);
 	ft_free_msg(&server->msg);
 	kill(server->pid_c, SIGUSR1);
 	server->pid_c = 0;

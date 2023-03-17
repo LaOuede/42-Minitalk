@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minitalk.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 10:10:07 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/17 13:18:47 by gle-roux         ###   ########.fr       */
+/*   Updated: 2023/03/17 16:32:08 by gwenolalero      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ typedef struct s_send
 /* ----------------UTILS FUNCTIONS----------------- */
 void		ft_add_back(t_msg **msg, t_msg *node);
 t_msg		*ft_create_node(char c);
+void		ft_error(void);
 void		ft_free_msg(t_msg **msg);
 t_send		*ft_init_client(char *pid, char *str);
 void		ft_print_msg(t_receive *server);
