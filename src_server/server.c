@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+        */
+/*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 13:51:35 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/16 20:26:10 by gwenolalero      ###   ########.fr       */
+/*   Updated: 2023/03/17 13:21:00 by gle-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -306,9 +306,9 @@ int	main(void)
 } */
 
 /* TEST 8 - Without usleep */
-static t_receive	g_server;
+/* static t_receive	g_server;
 
-t_receive	*ft_init_server(void)
+static t_receive	*ft_init_server(void)
 {
 	t_receive	*init;
 
@@ -323,7 +323,7 @@ t_receive	*ft_init_server(void)
 static void	handler_receiving(int signum, siginfo_t *info, void *ucontext)
 {
 	(void)ucontext;
-	if (info->si_pid)
+	if (info->si_pid != g_server.pid_c && info->si_pid != 0)
 		g_server.pid_c = info->si_pid;
 	if (signum == SIGUSR2)
 		g_server.byte |= 128 >> g_server.bits;
@@ -341,22 +341,74 @@ static void	handler_receiving(int signum, siginfo_t *info, void *ucontext)
 	}
 	else
 		kill(g_server.pid_c, SIGUSR2);
+} */
+
+
+/* TEST 9 - Blocking signals */
+static t_receive	*g_server;
+
+static t_receive	*ft_init_server(void)
+{
+	t_receive	*init;
+
+	init = ft_calloc(sizeof(t_receive), 1);
+	init->byte = 0;
+	init->bits = 0;
+	init->pid_c = 0;
+	init->pid_s = getpid();
+	return (init);
+}
+
+static t_receive	*ft_reboot(int pid)
+{
+	if (g_server->msg)
+	{
+		ft_print_msg(g_server);
+		ft_free_msg(&g_server->msg);
+	}
+	g_server->byte = 0;
+	g_server->bits = 0;
+	g_server->pid_c = pid;
+	return (g_server);
+}
+
+static void	handler_receiving(int signum, siginfo_t *info, void *ucontext)
+{
+	int	flag;
+
+	(void)ucontext;
+	flag = 0;
+	if (info->si_pid != g_server->pid_c && info->si_pid != 0)
+		ft_reboot(info->si_pid);
+	if (signum == SIGUSR2)
+		g_server->byte |= 128 >> g_server->bits;
+	if (++g_server->bits == 8)
+	{
+		if (g_server->byte != '\0')
+		{
+			ft_add_back(&g_server->msg, ft_create_node(g_server->byte));
+			flag = kill(g_server->pid_c, SIGUSR2);
+		}
+		else if (g_server->byte == '\0')
+			ft_print_msg(g_server);
+		g_server->byte = 0;
+		g_server->bits = 0;
+	}
+	else
+		flag = kill(g_server->pid_c, SIGUSR2);
 }
 
 int	main(void)
 {
 	struct sigaction	action;
 
-	sigemptyset(&action.sa_mask);
-	sigaddset(&action.sa_mask, SIGUSR1);
-	sigaddset(&action.sa_mask, SIGUSR2);
+	g_server = ft_init_server();
 	action.sa_flags = SA_SIGINFO;
 	action.sa_sigaction = handler_receiving;
-	g_server = *ft_init_server();
 	sigaction(SIGUSR1, &action, 0);
 	sigaction(SIGUSR2, &action, 0);
-	ft_printf(KBLU "Server PID : %d\n" KNRM, g_server.pid_s);
-	ft_printf(KBLU KBLD"🔵 Server listening... 🤖 \n" KNRM);
+	ft_printf(KBLU "Server PID : %d\n" KNRM, getpid());
+	ft_printf(KBLU KBLD"🔵 Server listening... 📟 \n\n" KNRM);
 	while (1)
 		pause ();
 	return (0);
@@ -369,7 +421,7 @@ int	main(void)
 	struct sigaction	action;
 	char				c;
 
-	action.sa_sigaction = handler_sigusr;
+	action.sa_sigaction = handler_receiving;
 	action.sa_flags = SA_SIGINFO | SA_RESTART;
 	pid = getpid();
 	printf(KBLU "Server PID : %d\n" KNRM, pid);

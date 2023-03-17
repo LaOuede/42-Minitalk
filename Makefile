@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+         #
+#    By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/26 12:57:00 by gle-roux          #+#    #+#              #
-#    Updated: 2023/03/16 20:29:26 by gwenolalero      ###   ########.fr        #
+#    Updated: 2023/03/17 12:36:25 by gle-roux         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -68,7 +68,7 @@ export HELP
 
 # Compiler and flags
 CC		=	gcc
-CFLAGS	= 	-Wall -Wextra -Werror
+CFLAGS	= 	-g -Wall -Wextra -Werror
 
 # Remove and Archives
 ARCH	=	ar rcs

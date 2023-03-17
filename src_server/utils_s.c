@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_s.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+        */
+/*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 09:47:24 by gwenolalero       #+#    #+#             */
-/*   Updated: 2023/03/16 20:25:54 by gwenolalero      ###   ########.fr       */
+/*   Updated: 2023/03/17 13:19:06 by gle-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,18 +43,24 @@ t_msg	*ft_create_node(char c)
 
 void	ft_print_msg(t_receive *server)
 {
-	t_msg	*ptr;
+	t_msg			*ptr;
+	static int		counter;
 
+	counter++;
+	
+	ft_printf(KBLU "Message received from client [" KBLU KBLD "%d"
+		KNRM KBLU "] :\n" KNRM, server->pid_c);
 	ptr = server->msg;
-	ft_printf(KBLU "Message received :\n" KNRM);
 	while (ptr)
 	{
 		write(1, &ptr->data, 1);
 		ptr = ptr->next;
 	}
 	write(1, "\n", 1);
+	ft_printf(KBLU "End of transmission [" KBLU KBLD "%d" KNRM KBLU "] \n\n" KNRM, counter);
 	ft_free_msg(&server->msg);
 	kill(server->pid_c, SIGUSR1);
+	server->pid_c = 0;
 }
 
 void	ft_free_msg(t_msg **msg)

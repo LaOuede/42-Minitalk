@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+        */
+/*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 14:08:12 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/16 20:13:42 by gwenolalero      ###   ########.fr       */
+/*   Updated: 2023/03/17 13:07:45 by gle-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -416,19 +416,15 @@ int	main(int argc, char **argv)
 
 	if (argc != 3 || ft_str_isdigit(argv[1]) == 0)
 	{
-		ft_printf(KYEL KBLD "🟡 Invalid arguments\n" KNRM);
-		ft_printf(KYEL "Usage: ./client <pid> <message_to_send> 🫵\n" KNRM);
+		ft_printf(KYEL "🟡 Usage: ./client <pid> <message_to_send> 🖖\n" KNRM);
 		exit(EXIT_FAILURE);
 	}
-	sigemptyset(&action.sa_mask);
-	sigaddset(&action.sa_mask, SIGUSR1);
-	sigaddset(&action.sa_mask, SIGUSR2);
 	action.sa_flags = SA_SIGINFO;
 	action.sa_sigaction = handler_sending;
 	g_msg = ft_init_client(argv[1], argv[2]);
 	sigaction(SIGUSR1, &action, 0);
 	sigaction(SIGUSR2, &action, 0);
-	ft_printf("Client PID  = %d\n", g_msg->pid_c);
+	ft_printf(KGRE KBLD "Client PID = " KNRM "%d\n", g_msg->pid_c);
 	kill(g_msg->pid_c, SIGUSR2);
 	while (1)
 		pause();
