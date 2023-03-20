@@ -6,7 +6,7 @@
 /*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 13:51:35 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/20 11:18:17 by gle-roux         ###   ########.fr       */
+/*   Updated: 2023/03/20 12:13:10 by gle-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -494,12 +494,17 @@ static void	handler_receiving(int signum, siginfo_t *info, void *ucontext)
 		if (server->byte != '\0')
 			server->msg = ft_stock_char(server->msg, server->byte, server);
 		else if (server->byte == '\0')
+		{
 			ft_print_msg(server);
+			if (kill(server->pid_c, SIGUSR1) == -1)
+				ft_error_signal(server);
+		}
 		server->byte = 0;
 		server->bits = 0;
 	}
 	else
-		kill(server->pid_c, SIGUSR2);
+		if (kill(server->pid_c, SIGUSR2) == -1)
+			ft_error_signal(server);
 }
 
 int	main(int argc, char **argv)

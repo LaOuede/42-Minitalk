@@ -6,11 +6,22 @@
 /*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 09:47:24 by gwenolalero       #+#    #+#             */
-/*   Updated: 2023/03/20 11:03:57 by gle-roux         ###   ########.fr       */
+/*   Updated: 2023/03/20 12:14:06 by gle-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minitalk.h"
+
+void	ft_error_signal(t_receive *server)
+{
+	if (server->msg)
+		free(server->msg);
+	if (server)
+		free(server);
+	ft_printf(KRED KBLD "🔴 ./server : " KNRM KRED
+		"Transmission ended unexpectedly 🚨\n" KNRM);
+	exit(EXIT_FAILURE);
+}
 
 t_receive	*ft_reboot(t_receive *server, pid_t pid_c)
 {
@@ -46,5 +57,4 @@ void	ft_print_msg(t_receive *server)
 		"] \n\n" KNRM, counter);
 	free(server->msg);
 	server->msg = NULL;
-	kill(server->pid_c, SIGUSR1);
 }

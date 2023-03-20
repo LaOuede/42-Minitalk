@@ -6,7 +6,7 @@
 /*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 10:10:07 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/20 10:48:46 by gle-roux         ###   ########.fr       */
+/*   Updated: 2023/03/20 12:10:25 by gle-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ typedef struct s_send
 }			t_send;
 
 /* ----------------UTILS FUNCTIONS----------------- */
+void		ft_error_signal(t_receive *server);
 t_receive	*ft_init_server(int pid_c);
 void		ft_print_msg(t_receive *server);
 t_receive	*ft_reboot(t_receive *server, int pid);

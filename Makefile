@@ -6,7 +6,7 @@
 #    By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/26 12:57:00 by gle-roux          #+#    #+#              #
-#    Updated: 2023/03/20 10:36:43 by gle-roux         ###   ########.fr        #
+#    Updated: 2023/03/20 12:00:56 by gle-roux         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,18 +35,6 @@ C = $(shell tput -Txterm setaf 6)
 W = $(shell tput -Txterm setaf 7)
 
 #------------------------------------------------------------------------------#
-#                                   TESTS                                      #
-#------------------------------------------------------------------------------#
-
-# For testing purposes only
-TEST1 = time ./client $(server_pid) $(python -c "print ('q' * 1000)")   
-TEST2_ARGS = 4 7 2
-TEST3_ARGS = -18 47 65
-TEST4_ARGS = 5 2 -3
-TEST5_ARGS = 3 3 2
-TEST6_ARGS = 3 A 2
-
-#------------------------------------------------------------------------------#
 #                                   TOOLS                                      #
 #------------------------------------------------------------------------------#
 define HELP
@@ -54,7 +42,6 @@ $Z---------------------------------------------------------------
 $YTools available$Z
 make help		$Y->$Z Display tools available
 make map		$Y->$Z Display mind map
-make mem		$Y->$Z Run test with leaks -atExit command
 make norm		$Y->$Z Run Norminette
 make text		$Y->$Z Open text generator
 make pdf 		$Y->$Z Open PDF subject
@@ -116,13 +103,17 @@ USER		=	$(shell whoami)
 #                                  RULES                                       #
 #------------------------------------------------------------------------------#
 
-# Creation of the executable
+# Executable creation
 all: dir $(CLIENT) $(SERVER)
 	@echo $Y"$$BANNER1"$W
 	@echo "				$Z...made by $Ygle-roux$Z$W🐭"
 	@echo "					$Z...evaluated by $Y$(USER)\n\n$W"
 
-# Compile
+#Create directory for *.o files
+dir:
+	@mkdir -p $(OBJS_DIR)
+
+# Compilation
 $(CLIENT): $(OBJS_C)
 	@make -C $(LIBFT_DIR)
 	@make -C $(PRINTF_DIR)
@@ -147,11 +138,7 @@ $(OBJS_DIR)%.o: $(SRCS_S_DIR)%.c $(HEADER)
 	@printf "\n $GCompiling : $Z$(notdir $<)"
 	@$(CC) $(CFLAGS) -c $< -o $@
 
-#Create directory for *.o files
-dir:
-	@mkdir -p $(OBJS_DIR)
-
-# Removes objects
+# Remove objects
 clean:
 	@echo "\n\n$W>>>>>>>>>>>>>>>>>>>>>>>>>>> $YCLEANING $W<<<<<<<<<<<<<<<<<<<<<<<<<<"
 	@$(RM) $(OBJS_DIR)
@@ -159,66 +146,37 @@ clean:
 	@$(MAKE) -C $(PRINTF_DIR) clean
 	@echo "$W------------ $Zclient & server : $(OBJS_DIR) was $Rdeleted ❌$W-----------"
 
-# Removes executables
+# Remove executables
 fclean: clean
 	@$(RM) $(SERVER) $(CLIENT) $(LIBFT) $(PRINTF)
 	@echo "\n$W-------- $ZAll exec. and archives successfully $Rdeleted ❌$W--------\n"
 	@echo "$W>>>>>>>>>>>>>>>>>>>>> $ZCleaning is $Gdone ✅ $W<<<<<<<<<<<<<<<<<<<<<\n\n"
 
-# Removes objects and executables and remake
+# Remove objects and executables and remake
 re: fclean
 	@$(MAKE) all
 
-# Displays tools available
+# Display tools available
 help:
 	@echo "$$HELP"
 
+# Open the subject
+pdf:
+	@open https://cdn.intra.42.fr/pdf/pdf/58187/fr.subject.pdf
+
+# Open a text generator
+text:
+	@open https://www.dummytextgenerator.com/#jump
+
+# Open a character generator
+test:
+	@open https://www.browserling.com/tools/text-repeat
+
+# Run norminette
 norm :
 	@echo "\n$W>>>>>>>>>>>>>>>>>>>>>>>>>> $YNORMINETTE $W<<<<<<<<<<<<<<<<<<<<<<<<<<$Z\n"
 	@norminette $(SRCS) $(HEADER) $(LIBFT_DIR) $(PRINTF_DIR) $(SRCS_C_DIR) $(SRCS_S_DIR)
 	@echo "\n$W>>>>>>>>>>>>>>>>>>>>>>>> $YNORMINETTE ✅ $W<<<<<<<<<<<<<<<<<<<<<<<<<<"
 
-#lsan : $(LSAN)
-#lsan : CFLAGS += -Wno-gnu-include-next -ILeakSanitizer -LLeakSanitizer -llsan -lc++
-#$(LSAN) :
-#	@if [ ! -d "LeakSanitizer"]; then git clone https://github.com/mhahnFr/LeakSanitizer.git; fi
-#	@$(MAKE) -C LeakSanitizer
-
-# Verifications before sumission
-#checkup: 
-#	@$(MAKE) test
-#	@echo "\n$W>>>>>>>>>>>>>>>>>>>>>>>>>>> $YMEMORY $W<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
-#	$(MAKE) lsan
-#	@echo "\n$W>>>>>>>>>>>>>>>>>>>>>>>>>> $YMEMORY ✅ $W<<<<<<<<<<<<<<<<<<<<<<<<<<<"
-#	@$(MAKE) norm
-
-# Opens the subject
-pdf:
-	@open https://cdn.intra.42.fr/pdf/pdf/58187/fr.subject.pdf
-
-map:
-	@open https://whimsical.com/push-swap-X6SXns36GzkpCxF5zxkMFJ
-
-text:
-	@open https://www.dummytextgenerator.com/#jump
-
-mem:
-	@echo "\n\n$W>>>>>>>>>>>>>>>>>>>>>>>>>>> $YMEMORY $W<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n"
-	@echo "$W---------------------- $Z./push_swap 3 1 2 $W-----------------------"
-	@leaks -atExit -- ./$(NAME) $(TEST1_ARGS)
-	@echo "$W---------------------- $Z./push_swap 3 1 2 $W-----------------------"
-	@valgrind --leak-check=full ./$(NAME) $(TEST1_ARGS)
-	@echo "$W---------------------- $Z./push_swap 3 3 2 $W-----------------------"
-	@leaks -atExit -- ./$(NAME) $(TEST5_ARGS)
-	@echo "$W---------------------- $Z./push_swap 3 3 2 $W-----------------------"
-	@valgrind --leak-check=full ./$(NAME) $(TEST5_ARGS)
-	@echo "$W---------------------- $Z./push_swap 3 A 2 $W-----------------------"
-	@leaks -atExit -- ./$(NAME) $(TEST6_ARGS)
-	@echo "$W---------------------- $Z./push_swap 3 A 2 $W-----------------------"
-	@valgrind --leak-check=full ./$(NAME) $(TEST6_ARGS)
-	@echo "$W>>>>>>>>>>>>>>>>>>>>>>>>> $YEND TESTS ✅ $W<<<<<<<<<<<<<<<<<<<<<<<<<\n"
-
-	valgrind --leak-check=full ./programme
-
 # Avoids file-target name conflicts
-.PHONY: all dir clean fclean re test norm lsan pdf help mem map text
+.PHONY: all dir clean fclean re help pdf text test norm
