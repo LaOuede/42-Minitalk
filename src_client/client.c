@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+        */
+/*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 14:08:12 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/17 16:13:14 by gwenolalero      ###   ########.fr       */
+/*   Updated: 2023/03/20 08:27:46 by gle-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -414,6 +414,7 @@ int	main(int argc, char **argv)
 {
 	struct sigaction	action;
 
+	(void) argc;
 	if (argc != 3 || ft_str_isdigit(argv[1]) == 0)
 	{
 		ft_printf(KYEL "🟡 Usage : ./client <pid> <message_to_send> 🖖\n" KNRM);
