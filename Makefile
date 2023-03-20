@@ -6,7 +6,7 @@
 #    By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/26 12:57:00 by gle-roux          #+#    #+#              #
-#    Updated: 2023/03/17 12:36:25 by gle-roux         ###   ########.fr        #
+#    Updated: 2023/03/20 10:36:43 by gle-roux         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,7 +39,7 @@ W = $(shell tput -Txterm setaf 7)
 #------------------------------------------------------------------------------#
 
 # For testing purposes only
-TEST1_ARGS = "3 1 2"
+TEST1 = time ./client $(server_pid) $(python -c "print ('q' * 1000)")   
 TEST2_ARGS = 4 7 2
 TEST3_ARGS = -18 47 65
 TEST4_ARGS = 5 2 -3
@@ -172,19 +172,6 @@ re: fclean
 # Displays tools available
 help:
 	@echo "$$HELP"
-
-# For testing purposes
-test:
-	@echo "\n\n$W>>>>>>>>>>>>>>>>>>>>>>>>>>> $YTESTING $W<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n"
-	@echo "$W---------------------- $Z./push_swap 3 1 2 $W-----------------------"
-	@./$(NAME) $(TEST1_ARGS)
-	@echo "$W---------------------- $Z./push_swap 4 7 2 $W-----------------------"
-	@./$(NAME) $(TEST2_ARGS)
-	@echo "$W-------------------- $Z./push_swap -18 47 65 $W---------------------"
-	@./$(NAME) $(TEST3_ARGS)
-	@echo "$W---------------------- $Z./push_swap 5 2 -3 $W----------------------"
-	@./$(NAME) $(TEST4_ARGS)
-	@echo "$W>>>>>>>>>>>>>>>>>>>>>>>>> $YEND TESTS ✅ $W<<<<<<<<<<<<<<<<<<<<<<<<<\n"
 
 norm :
 	@echo "\n$W>>>>>>>>>>>>>>>>>>>>>>>>>> $YNORMINETTE $W<<<<<<<<<<<<<<<<<<<<<<<<<<$Z\n"

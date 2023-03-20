@@ -6,7 +6,7 @@
 /*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 13:51:35 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/20 09:23:48 by gle-roux         ###   ########.fr       */
+/*   Updated: 2023/03/20 11:18:17 by gle-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -455,7 +455,7 @@ char	*ft_mem_alloc(char *str, int capacity)
 	return (new);
 }
 
-char	*ft_stock_char(char *str, char c)
+char	*ft_stock_char(char *str, char c, t_receive *server)
 {
 	static int	i = 0;
 	static int	size = 0;
@@ -474,16 +474,15 @@ char	*ft_stock_char(char *str, char c)
 		str = ft_mem_alloc(str, capacity);
 		capacity *= 2;
 	}
+	kill(server->pid_c, SIGUSR2);
 	return (str);
 }
 
 static void	handler_receiving(int signum, siginfo_t *info, void *ucontext)
 {
-	int					flag;
 	static t_receive	*server;
 
 	(void)ucontext;
-	flag = 0;
 	if (server && info->si_pid != server->pid_c && info->si_pid != 0)
 		ft_reboot(server, info->si_pid);
 	if (!server)
@@ -493,22 +492,17 @@ static void	handler_receiving(int signum, siginfo_t *info, void *ucontext)
 	if (++server->bits == 8)
 	{
 		if (server->byte != '\0')
-		{
-			ft_stock_char(server->msg, server->byte);
-			flag = kill(server->pid_c, SIGUSR2);
-		}
+			server->msg = ft_stock_char(server->msg, server->byte, server);
 		else if (server->byte == '\0')
 			ft_print_msg(server);
 		server->byte = 0;
 		server->bits = 0;
 	}
 	else
-		flag = kill(server->pid_c, SIGUSR2);
-	if (flag == -1)
-		ft_error_signal(server);
+		kill(server->pid_c, SIGUSR2);
 }
 
-/* int	main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
 	struct sigaction	action;
 
@@ -523,15 +517,15 @@ static void	handler_receiving(int signum, siginfo_t *info, void *ucontext)
 	action.sa_sigaction = handler_receiving;
 	sigaction(SIGUSR1, &action, 0);
 	sigaction(SIGUSR2, &action, 0);
-	ft_printf(KBLU "Server PID : %d\n" KNRM, getpid());
+	ft_printf(KGRE KBLD "Server PID : " KNRM KWHT "%d\n" KNRM, getpid());
 	ft_printf(KBLU KBLD"🔵 Server listening... 📟 \n\n" KNRM);
 	while (1)
 		pause ();
 	return (0);
-} */
+}
 
 /* Main design to test memory leaks tipping "q" on the server*/
-int	main(void)
+/* int	main(void)
 {
 	pid_t				pid;
 	struct sigaction	action;
@@ -553,4 +547,4 @@ int	main(void)
 	}
 	ft_printf(KBLU KBLD"🔵 ./server closing...\n" KNRM);
 	return (0);
-}
+} */
