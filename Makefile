@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+         #
+#    By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/26 12:57:00 by gle-roux          #+#    #+#              #
-#    Updated: 2023/03/21 10:51:03 by gle-roux         ###   ########.fr        #
+#    Updated: 2023/03/21 17:58:51 by gwenolalero      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -104,7 +104,7 @@ USER		=	$(shell whoami)
 #------------------------------------------------------------------------------#
 
 # Executable creation
-all: dir $(CLIENT) $(SERVER)
+all: dir client server
 	@echo $Y"$$BANNER1"$W
 	@echo "				$Z...made by $Ygle-roux$Z$W🐭"
 	@echo "					$Z...evaluated by $Y$(USER)\n\n$W"
@@ -114,12 +114,12 @@ dir:
 	@mkdir -p $(OBJS_DIR)
 
 # Compilation
-$(CLIENT): $(OBJS_C)
+client: $(OBJS_C)
 	@make -C $(LIBFT_DIR)
 	@make -C $(PRINTF_DIR)
 	@$(CC) $(CFLAGS) $(SRCS_C) $(LIBFT) $(PRINTF) -o $(CLIENT)
 
-$(SERVER): $(OBJS_S)
+server: $(OBJS_S)
 	@echo "\n\n$W--------------------- $Zminitalk is $Gdone ✅ $W---------------------"
 	@echo "\n$W-------------------------- $Zlibft.a $W----------------------------"
 	@make -C $(LIBFT_DIR)
@@ -182,4 +182,4 @@ norm :
 	@echo "\n$W>>>>>>>>>>>>>>>>>>>>>>>> $YNORMINETTE ✅ $W<<<<<<<<<<<<<<<<<<<<<<<<<<"
 
 # Avoids file-target name conflicts
-.PHONY: all dir clean fclean re help pdf text test norm bonus
+.PHONY: all dir client server clean fclean re help pdf text test norm bonus

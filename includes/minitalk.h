@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minitalk.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 10:10:07 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/21 13:43:51 by gle-roux         ###   ########.fr       */
+/*   Updated: 2023/03/21 17:54:45 by gwenolalero      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 # include "../libft/includes/libft.h"
 # include "../ft_printf/includes/ft_printf.h"
 # include <signal.h>
-# include <unistd.h>
 
 /* --------------------COLORS--------------------- */
 # define KNRM "\x1B[m"
