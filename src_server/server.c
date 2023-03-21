@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 13:51:35 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/21 15:17:38 by gle-roux         ###   ########.fr       */
+/*   Updated: 2023/03/21 17:46:55 by gwenolalero      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,21 @@ char	*ft_stock_char(char *str, char c, t_receive *server)
 	return (str);
 }
 
-static void	handler_receiving(int signum, siginfo_t *info, void *ucontext)
+/* 
+-> sig : The number of the signal that caused invocation of the handler.
+-> info : A pointer to a siginfo_t, which is a structure containing further
+	information about the signal.
+
+Conversion from binary to ASCII.
+Ex : with 'a' character.
+-> server->byte = 00000000;
+-> 128 = 10000000;
+Using the | and >> binary operators, bits are put together to assemble the char.
+	server->byte |= (128 >> 1) is equal to 01000000;
+	server->byte |= (128 >> 2) is equal to 01100000;
+	server->byte |= (128 >> 7) is equal to 01100010 [97] [a].
+ */
+static void	handler_receiving(int sig, siginfo_t *info, void *ucontext)
 {
 	static t_receive	*server;
 
@@ -63,7 +77,7 @@ static void	handler_receiving(int signum, siginfo_t *info, void *ucontext)
 		ft_reboot(server, info->si_pid);
 	if (!server)
 		server = ft_init_server(info->si_pid);
-	if (signum == SIGUSR2)
+	if (sig == SIGUSR2)
 		server->byte |= (128 >> server->bits);
 	if (++server->bits == 8)
 	{
@@ -79,12 +93,21 @@ static void	handler_receiving(int signum, siginfo_t *info, void *ucontext)
 		server->bits = 0;
 	}
 	else
-	{
 		if (kill(server->pid_c, SIGUSR2) == -1)
 			ft_error_signal(server);
-	}
 }
 
+/* 
+-> sigemptyset : initializes the signal set given by set to empty,
+	with all signals excluded from the set.
+-> sigaddset : adds the specified signal signo to the signal set.
+-> SA_SIGINFO : The signal handler takes three arguments, not one.
+	In this case, sa_sigaction should be set instead of sa_handler.
+-> sigaction : is used to change the action taken by a process
+	on receipt of a specific signal.
+-> sa_mask : specifies a mask of signals which should be blocked.
+-> sa_flags : specifies a set of flags used to modify the delivery of the signal.
+ */
 int	main(int argc, char **argv)
 {
 	struct sigaction	action;

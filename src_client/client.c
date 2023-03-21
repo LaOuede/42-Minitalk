@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 14:08:12 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/21 15:26:08 by gle-roux         ###   ########.fr       */
+/*   Updated: 2023/03/21 17:47:47 by gwenolalero      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,17 +41,32 @@ t_send	*ft_init_client(char *pid, char *str)
 	if (!init)
 	{
 		init = ft_calloc(sizeof(t_send), 1);
-		init->len = ft_strlen(str);
+		init->bits = 0;
 		init->bytes_sent = ft_strlen(str);
+		init->index = 0;
+		init->len = ft_strlen(str);
 		init->msg = ft_strdup(str);
 		init->pid_c = getpid();
 		init->pid_s = atoi(pid);
-		init->bits = 0;
-		init->index = 0;
 	}
 	return (init);
 }
 
+/* 
+Conversion from ASCII to binary.
+Ex : with 'a' character.
+-> a = 01100010;
+-> 128 = 10000000;
+Using the & and >> binary operators, byte is reduced to bits to be send.
+	a & (128 >> 0) is equal to 00000000 so SIGUSR1 [0] is sent;
+	a & (128 >> 1) is equal to 01000000 so SIGUSR2 [1] is sent;
+	a & (128 >> 2) is equal to 00100000 so SIGUSR2 [1] is sent;
+	a & (128 >> 3) is equal to 00000000 so SIGUSR1 [0] is sent;
+	a & (128 >> 4) is equal to 00000000 so SIGUSR1 [0] is sent;
+	a & (128 >> 5) is equal to 00000000 so SIGUSR1 [0] is sent;
+	a & (128 >> 6) is equal to 00000010 so SIGUSR2 [1] is sent;
+	a & (128 >> 7) is equal to 00000000 so SIGUSR1 [0] is sent;
+ */
 static void	handler_sending(int signum, siginfo_t *info, void *ucontext)
 {
 	int				flag;
@@ -65,11 +80,10 @@ static void	handler_sending(int signum, siginfo_t *info, void *ucontext)
 		ft_end_com(msg);
 	if (signum == SIGUSR2)
 	{
-		if (msg->len >= 0 && msg->msg[msg->index] & 128)
+		if (msg->len >= 0 && (msg->msg[msg->index] & (128 >> msg->bits)))
 			flag = kill(msg->pid_s, SIGUSR2);
 		else
 			flag = kill(msg->pid_s, SIGUSR1);
-		msg->msg[msg->index] <<= 1;
 		if (++msg->bits == 8)
 		{
 			msg->bits = 0;
