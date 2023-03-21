@@ -6,7 +6,7 @@
 #    By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/26 12:57:00 by gle-roux          #+#    #+#              #
-#    Updated: 2023/03/13 11:18:42 by gle-roux         ###   ########.fr        #
+#    Updated: 2023/03/21 11:05:26 by gle-roux         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,6 @@ SRCS_LIST	=	ft_atoi.c \
 				ft_bzero.c \
 				ft_calloc.c \
 				ft_free_tab.c \
-				ft_get_next_line.c \
 				ft_isalnum.c \
 				ft_isalpha.c \
 				ft_isascii.c \

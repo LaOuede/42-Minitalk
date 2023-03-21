@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/15 09:47:24 by gwenolalero       #+#    #+#             */
-/*   Updated: 2023/03/20 12:14:06 by gle-roux         ###   ########.fr       */
+/*   Created: 2023/03/15 09:47:24 by gle-roux          #+#    #+#             */
+/*   Updated: 2023/03/21 15:23:45 by gle-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,10 @@
 void	ft_error_signal(t_receive *server)
 {
 	if (server->msg)
+	{
 		free(server->msg);
+		server->msg = NULL;
+	}
 	if (server)
 		free(server);
 	ft_printf(KRED KBLD "🔴 ./server : " KNRM KRED

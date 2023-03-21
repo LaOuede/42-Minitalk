@@ -6,12 +6,12 @@
 #    By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/26 12:57:00 by gle-roux          #+#    #+#              #
-#    Updated: 2023/03/20 12:00:56 by gle-roux         ###   ########.fr        #
+#    Updated: 2023/03/21 10:51:03 by gle-roux         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 #------------------------------------------------------------------------------#
-#                          BANNER & COLOR SETINGS                              #
+#                          BANNER & COLOR SETTINGS                             #
 #------------------------------------------------------------------------------#
 
 #Banner
@@ -41,9 +41,9 @@ define HELP
 $Z---------------------------------------------------------------
 $YTools available$Z
 make help		$Y->$Z Display tools available
-make map		$Y->$Z Display mind map
 make norm		$Y->$Z Run Norminette
 make text		$Y->$Z Open text generator
+make test		$Y->$Z Open character generator
 make pdf 		$Y->$Z Open PDF subject
 ---------------------------------------------------------------
 endef
@@ -152,6 +152,9 @@ fclean: clean
 	@echo "\n$W-------- $ZAll exec. and archives successfully $Rdeleted ❌$W--------\n"
 	@echo "$W>>>>>>>>>>>>>>>>>>>>> $ZCleaning is $Gdone ✅ $W<<<<<<<<<<<<<<<<<<<<<\n\n"
 
+# Bonus
+bonus : re
+
 # Remove objects and executables and remake
 re: fclean
 	@$(MAKE) all
@@ -179,4 +182,4 @@ norm :
 	@echo "\n$W>>>>>>>>>>>>>>>>>>>>>>>> $YNORMINETTE ✅ $W<<<<<<<<<<<<<<<<<<<<<<<<<<"
 
 # Avoids file-target name conflicts
-.PHONY: all dir clean fclean re help pdf text test norm
+.PHONY: all dir clean fclean re help pdf text test norm bonus

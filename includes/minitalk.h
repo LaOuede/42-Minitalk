@@ -6,7 +6,7 @@
 /*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 10:10:07 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/20 12:10:25 by gle-roux         ###   ########.fr       */
+/*   Updated: 2023/03/21 13:43:51 by gle-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 # include "../ft_printf/includes/ft_printf.h"
 # include <signal.h>
 # include <unistd.h>
-# include <stdio.h>
 
 /* --------------------COLORS--------------------- */
 # define KNRM "\x1B[m"
@@ -37,11 +36,11 @@
 /* -------------------STRUCTURES------------------- */
 typedef struct s_receive
 {
-	int		bits;
-	char	byte;
-	char	*msg;
-	pid_t	pid_c;
-}			t_receive;
+	int				bits;
+	unsigned char	byte;
+	char			*msg;
+	pid_t			pid_c;
+}					t_receive;
 
 typedef struct s_send
 {

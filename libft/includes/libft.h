@@ -6,7 +6,7 @@
 /*   By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 10:10:07 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/14 08:24:51 by gle-roux         ###   ########.fr       */
+/*   Updated: 2023/03/21 11:05:03 by gle-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,16 +92,5 @@ int		ft_lstsize(t_list *lst);
 /*Other functions*/
 char	*ft_free_tab(char **tab);
 int		ft_str_isdigit(char *str);
-
-/*Get_next_line*/
-char	*get_next_line(int fd);
-char	*ft_strnjoin(char *s1, const char *s2, int s2_size);
-
-typedef struct s_buf
-{
-	char	*str;
-	ssize_t	readlen;
-	ssize_t	ind;
-}	t_buf;
 
 #endif
