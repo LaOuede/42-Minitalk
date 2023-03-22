@@ -6,7 +6,7 @@
 /*   By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 13:51:35 by gle-roux          #+#    #+#             */
-/*   Updated: 2023/03/21 17:46:55 by gwenolalero      ###   ########.fr       */
+/*   Updated: 2023/03/21 21:18:15 by gwenolalero      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ char	*ft_mem_alloc(char *str, int capacity)
 		i++;
 	}
 	free(str);
-	str = NULL;
 	return (new);
 }
 
@@ -50,7 +49,8 @@ char	*ft_stock_char(char *str, char c, t_receive *server)
 		str = ft_mem_alloc(str, capacity);
 		capacity *= 2;
 	}
-	kill(server->pid_c, SIGUSR2);
+	if (kill(server->pid_c, SIGUSR2) == -1)
+		ft_error_signal(server);
 	return (str);
 }
 

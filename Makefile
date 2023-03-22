@@ -6,7 +6,7 @@
 #    By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/26 12:57:00 by gle-roux          #+#    #+#              #
-#    Updated: 2023/03/21 17:58:51 by gwenolalero      ###   ########.fr        #
+#    Updated: 2023/03/21 21:19:42 by gwenolalero      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -73,7 +73,7 @@ SRCS_C		=	$(addprefix $(SRCS_C_DIR), $(SRCS_C_LIST))
 
 SRCS_S_DIR	=	./src_server/
 SRCS_S_LIST	=	server.c \
-				utils_s.c
+				utils.c
 SRCS_S		=	$(addprefix $(SRCS_S_DIR), $(SRCS_S_LIST))
 
 OBJS_DIR	=	./obj/
