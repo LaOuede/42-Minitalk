@@ -3,15 +3,15 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gwenolaleroux <gwenolaleroux@student.42    +#+  +:+       +#+         #
+#    By: gle-roux <gle-roux@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/26 12:57:00 by gle-roux          #+#    #+#              #
-#    Updated: 2023/03/21 21:19:42 by gwenolalero      ###   ########.fr        #
+#    Updated: 2023/03/22 07:57:15 by gle-roux         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 #------------------------------------------------------------------------------#
-#                          BANNER & COLOR SETTINGS                             #
+#                          BANNER & COLOR SETINGS                              #
 #------------------------------------------------------------------------------#
 
 #Banner
@@ -55,7 +55,7 @@ export HELP
 
 # Compiler and flags
 CC		=	gcc
-CFLAGS	= 	-g -Wall -Wextra -Werror
+CFLAGS	= 	-Wall -Wextra -Werror
 
 # Remove and Archives
 ARCH	=	ar rcs
@@ -103,8 +103,8 @@ USER		=	$(shell whoami)
 #                                  RULES                                       #
 #------------------------------------------------------------------------------#
 
-# Executable creation
-all: dir client server
+# Creation of the executable
+all: dir $(CLIENT) $(SERVER)
 	@echo $Y"$$BANNER1"$W
 	@echo "				$Z...made by $Ygle-roux$Z$W🐭"
 	@echo "					$Z...evaluated by $Y$(USER)\n\n$W"
@@ -114,12 +114,12 @@ dir:
 	@mkdir -p $(OBJS_DIR)
 
 # Compilation
-client: $(OBJS_C)
+$(CLIENT): $(OBJS_C)
 	@make -C $(LIBFT_DIR)
 	@make -C $(PRINTF_DIR)
 	@$(CC) $(CFLAGS) $(SRCS_C) $(LIBFT) $(PRINTF) -o $(CLIENT)
 
-server: $(OBJS_S)
+$(SERVER): $(OBJS_S)
 	@echo "\n\n$W--------------------- $Zminitalk is $Gdone ✅ $W---------------------"
 	@echo "\n$W-------------------------- $Zlibft.a $W----------------------------"
 	@make -C $(LIBFT_DIR)
@@ -138,7 +138,7 @@ $(OBJS_DIR)%.o: $(SRCS_S_DIR)%.c $(HEADER)
 	@printf "\n $GCompiling : $Z$(notdir $<)"
 	@$(CC) $(CFLAGS) -c $< -o $@
 
-# Remove objects
+# Removes objects
 clean:
 	@echo "\n\n$W>>>>>>>>>>>>>>>>>>>>>>>>>>> $YCLEANING $W<<<<<<<<<<<<<<<<<<<<<<<<<<"
 	@$(RM) $(OBJS_DIR)
@@ -146,24 +146,24 @@ clean:
 	@$(MAKE) -C $(PRINTF_DIR) clean
 	@echo "$W------------ $Zclient & server : $(OBJS_DIR) was $Rdeleted ❌$W-----------"
 
-# Remove executables
+# Removes executables
 fclean: clean
 	@$(RM) $(SERVER) $(CLIENT) $(LIBFT) $(PRINTF)
 	@echo "\n$W-------- $ZAll exec. and archives successfully $Rdeleted ❌$W--------\n"
 	@echo "$W>>>>>>>>>>>>>>>>>>>>> $ZCleaning is $Gdone ✅ $W<<<<<<<<<<<<<<<<<<<<<\n\n"
 
-# Bonus
-bonus : re
-
-# Remove objects and executables and remake
+# Removes objects and executables and remake
 re: fclean
 	@$(MAKE) all
 
-# Display tools available
+# Bonus
+bonus : re
+
+# Displays tools available
 help:
 	@echo "$$HELP"
 
-# Open the subject
+# Opens the subject
 pdf:
 	@open https://cdn.intra.42.fr/pdf/pdf/58187/fr.subject.pdf
 
@@ -181,5 +181,8 @@ norm :
 	@norminette $(SRCS) $(HEADER) $(LIBFT_DIR) $(PRINTF_DIR) $(SRCS_C_DIR) $(SRCS_S_DIR)
 	@echo "\n$W>>>>>>>>>>>>>>>>>>>>>>>> $YNORMINETTE ✅ $W<<<<<<<<<<<<<<<<<<<<<<<<<<"
 
+# To make easy and quick tests
+# ./client <server_pid> $(python -c "print ('a' * 100000)")
+
 # Avoids file-target name conflicts
-.PHONY: all dir client server clean fclean re help pdf text test norm bonus
+.PHONY: all dir clean fclean re bonus test norm lsan pdf help mem map text
