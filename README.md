@@ -23,7 +23,7 @@ I've acquired a lot of basic knowledge on C programming :
 - Understanding of UNIX signals
 - Handling and interpreting signals
 - Memory management (dynamic arrays)
-- User Interface Design
+- Coding standards and requirements
 - Testing and debugging
 
 ---
