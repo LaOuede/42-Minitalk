@@ -37,12 +37,12 @@ I've acquired a lot of basic knowledge on C programming :
 
 <h3 align="left">Usage 🛠</h3>
 
-- Compilation :
+1- Compilation :
 ```bash
 make
 ```
 
-- Execution :
+2- Execution :
 ```bash
 ./server
 ```
@@ -50,7 +50,7 @@ make
 ./client <server PID> <string to pass>
 ```
 
-- Behaviour :
+3- Behaviour :
 <img width="2209" alt="Screen Shot 2023-06-26 at 8 25 49 AM" src="https://github.com/LaOuede/Minitalk/assets/114024436/0d74c7c6-2b19-45c4-918b-cfa8847c315b">
 
 
