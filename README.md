@@ -17,7 +17,7 @@ Go to [42 Québec](https://42quebec.com/) to discover the course ! 👈
 
 ---
 
-<h3 align="left">What I've learned</h3>
+<h3 align="left">What I've learned 📚</h3>
 
 I've acquired a lot of basic knowledge on C programming :
 - Understanding of UNIX signals
@@ -28,19 +28,21 @@ I've acquired a lot of basic knowledge on C programming :
 
 ---
 
-<h3 align="left">If I had to do it all over again</h3>
+<h3 align="left">If I had to do it all over again 🗒</h3>
 
 - I would improve my memory managemtn by sending the lenght of the string as the first information.
   This way, I would only have to allocate memory once.
 
 ---
 
-Compilation :
+<h3 align="left">Usage 🛠</h3>
+
+- Compilation :
 ```bash
 make
 ```
 
-Execution :
+- Execution :
 ```bash
 ./server
 ```
@@ -48,7 +50,7 @@ Execution :
 ./client <server PID> <string to pass>
 ```
 
-Behaviour :
+- Behaviour :
 <img width="2209" alt="Screen Shot 2023-06-26 at 8 25 49 AM" src="https://github.com/LaOuede/Minitalk/assets/114024436/0d74c7c6-2b19-45c4-918b-cfa8847c315b">
 
 
